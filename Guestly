@@ -21,7 +21,7 @@ local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/DripC
 
 local entity = Creator.createEntity({
     CustomName = "Guestly", -- Custom name of your entity
-    Model = "rbxassetid://91714777596860", -- Can be GitHub file or rbxassetid
+    Model = "rbxassetid://111468129017731", -- Can be GitHub file or rbxassetid
     Speed = 75, -- Percentage, 100 = default Rush speed
     DelayTime = 0.8, -- Time before starting cycles (seconds)
     HeightOffset = 0,
@@ -43,7 +43,7 @@ local entity = Creator.createEntity({
         100, -- Shake start distance (from Entity to you)
     },
     Jumpscare = {
-        false, -- Enabled ('false' if you don't want jumpscare)
+        true, -- Enabled ('false' if you don't want jumpscare)
         {
             Image1 = "https://www.roblox.com/library/11862656491", -- Image1 url
             Image2 = "https://www.roblox.com/library/11862656491", -- Image2 url
