@@ -1,15 +1,3 @@
-local entityModel = true
-
--- Kiểm tra các điều kiện để KHÔNG spawn entity
-local isSeekActive = game.Workspace:FindFirstChild("SeekMovingNewClone") ~= nil
-local isShopRoom = currentRoom and currentRoom:FindFirstChild("Assets") and currentRoom.Assets:FindFirstChild("ShopProps") ~= nil
-local isSpecialRoom = room == 50 or room == 51 or room == 52
-local isNearEnd = room >= 90
-
-if isSeekActive or isSpecialRoom or isShopRoom or isNearEnd then
-    entityModel = false
-end
-
 -- Nếu vẫn cho spawn entity
 if entityModel then
     -- Âm thanh xuất hiện
@@ -40,35 +28,43 @@ if entityModel then
     -- camShake:Start()
     -- camShake:Shake({Magnitude = 1, Roughness = 2, FadeIn = 0.1, FadeOut = 1})
 
-    -- Tải Entity Spawner
+-- Tải Entity Spawner
     local Spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/DoorEntitySpawn%2BSource"))()
 
-    local entity = Spawner.createEntity({
-        CustomName = "Hunger/Hungered",
-        Model = "https://github.com/PABMAXICHAC/doors-monsters-models/blob/main/hunger.rbxm?raw=true",
-        Speed = 300,
-        MoveDelay = 2,
-        HeightOffset = 0,
-        CanKill = true,
-        KillRange = 25,
-        SpawnInFront = false,
-        ShatterLights = true,
-        FlickerLights = {
-            Enabled = true,
-            Duration = 5
-        },
-        Cycles = {
-            Min = 4,
-            Max = 6,
-            Delay = 0.5,
-        },
-        CamShake = {
-            Enabled = false -- Không rung camera
-        },
-        ResistCrucifix = false,
-        BreakCrucifix = true
-    })
- },
+-- Create entity
+local entity = Spawner.createEntity({
+    CustomName = "Hunger/hungered", -- Custom name of your entity
+    Model = "rbxassetid://82461654737204/", -- Can be GitHub file or rbxassetid
+    Speed = 300, -- Percentage, 100 = default Rush speed
+    DelayTime = 3, -- Time before starting cycles (seconds)
+    HeightOffset = 1,
+    CanKill = true,
+    NoDieOnCrouching = false,
+    NoHiding = false,
+    AntiCrucifix = false,
+    KillRange = 25,
+    OneRoom = false,
+    DieOnLook = false,
+    BreakLights = true,
+    BackwardsMovement = false,
+     MovementDeath = {
+        false, -- Turned On?
+        '1',  --- '1'= 'Instant Without Being Looked out' | '2' = 'With Being Looked At'
+    },
+    FlickerLights = {
+        true, -- Enabled/Disabled
+        3 -- Time (seconds)
+    },
+    Cycles = {
+        Min = 6,
+        Max = 6,
+        WaitTime = 1,
+    },
+    CamShake = {
+        true, -- Enabled/Disabled
+        {3.5, 20, 0.1, 1}, -- Shake values (don't change if you don't know)
+        100, -- Shake start distance (from Entity to you)
+    },
     Jumpscare = {
        true, -- Enabled/Disabled
         {
@@ -105,51 +101,76 @@ if entityModel then
     }
 })
 
-    -- Debug các sự kiện
-    entity.Debug.OnEntitySpawned = function()
-        print("Entity has spawned")
-        -- Đã bỏ gọi Earthquake ở đây
-    end
+-----[[ Advanced Sctipting ]]-----
 
-    entity.Debug.OnEntityDespawned = function()
-        print("Entity has despawned")
-        local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
-        achievementGiver({
-            Title = "Too smart",
-            Desc = "ULTRA pro gamer",
-            Reason = "Encounter Hunger/Hungered",
-            Image = "rbxassetid://17787953833"
-        })
-    end
-
-    entity.Debug.OnEntityStartMoving = function()
-        print("Entity started moving")
-    end
-
-    entity.Debug.OnEntityFinishedRebound = function()
-        print("Entity finished rebound")
-    end
-
-    entity.Debug.OnEntityEnteredRoom = function(room)
-        print("Entity entered room:", room)
-    end
-
-    entity.Debug.OnLookAtEntity = function()
-        print("Player looking at entity")
-    end
-
-    entity.Debug.OnDeath = function()
-        print("Player has died")
-        firesignal(game.ReplicatedStorage.RemotesFolder.DeathHint.OnClientEvent, {
-            "You died to Hunger or who call Hungered",
-            "It appears without red room now, but still dangerous.",
-            "He can come back a few times, so hide until it's safe."
-        }, "Blue")
-    end
-
-    -- Delay rồi spawn entity
-    task.delay(13.856, function()
-        Spawner.runEntity(entity)
-        require(game.ReplicatedStorage.ClientModules.Module_Events).tryp(workspace.CurrentRooms, 100)
-    end)
+entity.Debug.OnEntityMoving = function(Invincible,Hiding,plrCollisionPoint)
+print("Invincible: "..tostring(Invincible))
+print("Player to Entity Collision (None hiding Point): "..tostring(plrCollisionPoint))
+print("Hiding: "..tostring(Hiding))
 end
+       
+entity.Debug.OnEntitySpawned = function()
+    print("Entity has spawned:")
+end
+
+entity.Debug.OnEntityDespawned = function()
+    print("Entity has despawned:")
+
+---====== Load achievement giver ======---
+local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
+
+---====== Display achievement ======---
+achievementGiver({
+    Title = "Im The OrigiNal",
+    Desc = "Black",
+    Reason = "Survive the Entity Hunger/hungered",
+    Image = "rbxassetid://3100736018"
+})
+Followed:Destroy()
+end
+
+entity.Debug.OnEntityFinishedRebound = function()
+    print("Entity has finished rebound:")
+end
+
+entity.Debug.OnEntityEnteredRoom = function(entityTable, room)
+    print("Entity:", "has entered room:",room)
+end
+
+entity.Debug.OnLookAtEntity = function()
+    print("Player has looked at entity:")
+end
+
+entity.Debug.OnDeath = function()
+    warn("Player has died.")
+    local func, setupval, getinfo, typeof, getgc, next = nil, debug.setupvalue or setupvalue, debug.getinfo or getinfo, typeof, getgc, next
+
+for i,v in next, getgc(false) do
+    if typeof(v) == "function" then
+        local info = getinfo(v)
+        if info.currentline == 54 and info.nups == 2 and info.is_vararg == 0 then
+            func = v
+            break
+        end
+    end
+end
+
+local function DeathHint(hints, type: string)
+    setupval(func, 1, hints)
+    if type ~= nil then
+        setupval(func, 2, type)
+    end
+end
+
+DeathHint({
+    "You died to who you Call G-95",
+    "This Entity its So Faster So try Hide",
+    "Its from to hell He Make YoU Suffer",
+    "..-so avoid Eye Contact"
+}, "Blue") -- "Blue" or "Yellow"
+end
+
+------------------------
+
+-- Run the created entity
+Spawner.runEntity(entity)
