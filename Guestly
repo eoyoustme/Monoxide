@@ -1,107 +1,98 @@
-game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 0, 0)
-game.Lighting.MainColorCorrection.Contrast = 0.6
-local tween = game:GetService("TweenService")
-tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(0.5), {Contrast = 0}):Play()
+-- Lighting effect
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(61, 171, 98)
+game.Lighting.MainColorCorrection.Contrast = 0.2
+game.Lighting.MainColorCorrection.Saturation = -0.7
+
 local TweenService = game:GetService("TweenService")
-local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(0.5),{TintColor = Color3.fromRGB(255, 255, 255)})
-TW:Play()
-    local roast = Instance.new("Sound")
-    roast.Parent = workspace
-    roast.Name = "roast"
-    roast.SoundId = "rbxassetid://"
-    roast.Volume = 0.5
-    roast.Pitch = 3
-    roast:Play()
-    wait(0.6)
-    roast:Destroy()
+TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {Contrast = 0}):Play()
+TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {Saturation = 0}):Play()
+TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
 
-local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/DripCapybara/Doors-Mode-Remakes/refs/heads/main/ModifiedSpawner.lua"))()
+-- Sound setup
+local cue1 = Instance.new("Sound", workspace)
+cue1.Name = "Scream"
+cue1.SoundId = "rbxassetid://97443546281701"
+cue1.Volume = 0.1
+Instance.new("DistortionSoundEffect", cue1).Level = 1
+Instance.new("PitchShiftSoundEffect", cue1).Octave = 0.5
+cue1:Play()
 
--- Create entity
+local cue2 = Instance.new("Sound", workspace)
+cue2.Name = "Spawn"
+cue2.SoundId = "rbxassetid://97443546281701"
+cue2.Volume = 3
+cue2:Play()
+
+-- Camera shake setup
+local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+local camera = workspace.CurrentCamera
+local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
+	camera.CFrame = camera.CFrame * shakeCf
+end)
+camShake:Start()
+camShake:ShakeOnce(10, 3, 0.1, 6, 2, 0.5)
+
+-- Delay and speed setup
+local speed = math.random(55, 75)
+local delays = {"2", "2.5", "1.5", "1", "2.1"}
+local selectedDelay = delays[math.random(1, #delays)]
+wait(2.8)
+
+-- Load and spawn 1 entity
+local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/DripCapybara/Doors-Mode-Remakes/refs/heads/main/ReboundSpawner.lua"))()
 
 local entity = Creator.createEntity({
-    CustomName = "Guestly", -- Custom name of your entity
-    Model = "rbxassetid://138643899461580", -- Can be GitHub file or rbxassetid
-    Speed = 55, -- Percentage, 100 = default Rush speed
-    DelayTime = 0.8, -- Time before starting cycles (seconds)
-    HeightOffset = 0,
+    CustomName = "Guestly",
+    Model = "rbxassetid://12847597717",
+    Speed = speed,
+    DelayTime = selectedDelay,
+    HeightOffset = 0.3,
     CanKill = true,
-    BreakLights = true,
-    KillRange = 40,
+    BreakLights = false,
+    KillRange = 25,
     BackwardsMovement = true,
-    FlickerLights = {
-        false, -- Enabled
-        2.5, -- Time (seconds)
-    },
-    Cycles = {
-        Min = 0,
-        Max = 1
-    },
-    CamShake = {
-        true, -- Enabled
-        {5, 15, 0.1, 1}, -- Shake values (don't change if you don't know)
-        100, -- Shake start distance (from Entity to you)
-    },
+    FlickerLights = {false, 2.5},
+    Cycles = {Min = 1, Max = 1},
+    CamShake = {true, {5, 15, 0.1, 1}, 100},
     Jumpscare = {
-        true, -- Enabled ('false' if you don't want jumpscare)
+        true,
         {
-            Image1 = "https://www.roblox.com/library/11862656491", -- Image1 url
-            Image2 = "https://www.roblox.com/library/11862656491", -- Image2 url
+            Image1 = "https://www.roblox.com/library/11862656491",
+            Image2 = "https://www.roblox.com/library/11862656491",
             Shake = false,
-            Sound1 = {
-                0, -- SoundId
-                { Volume = 0.5 }, -- Sound properties
-            },
-            Sound2 = {
-                5567523008, -- SoundId
-                { Volume = 0.5 }, -- Sound properties
-            },
-            Flashing = {
-                true, -- Enabled
-                Color3.fromRGB(6, 38, 135), -- Color
-            },
-            Tease = {
-                false, -- Enabled ('false' if you don't want tease)
-                Min = 1,
-                Max = 3,
-            },
-        },
+            Sound1 = {0, {Volume = 0.5}},
+            Sound2 = {5567523008, {Volume = 0.5}},
+            Flashing = {true, Color3.fromRGB(6, 38, 135)},
+            Tease = {false, Min = 1, Max = 3}
+        }
     },
-    CustomDialog = {"You died to Rebound...", "It appears at the next door and has a chance to stay there or run back to the latest door.", "He will come back many times after his initial spawn", "so hide every next door until it is safe.."}, -- Custom death message (can be as long as you want)
+    CustomDialog = {"w"},
 })
 
------[[ Advanced ]]-----
-entity.Debug.OnEntitySpawned = function(entityModel)
-    print("Entity has spawned:", entityModel)
-end
-
-entity.Debug.OnEntityDespawned = function(entityModel)
-    print("Entity has despawned:", entityModel)
-    workspace.CurrentRooms[game.ReplicatedStorage.GameData.LatestRoom.Value]:WaitForChild("Door").ClientOpen:FireServer()
-end
-
-entity.Debug.OnEntityStartMoving = function(entityModel)
-    print("Entity has started moving:", entityModel)
+entity.Debug.OnEntitySpawned = function(model)
+    print("Entity spawned:", model)
     wait(15)
-    workspace.Matcher:Destroy()
+    if workspace:FindFirstChild("Rebound") then
+        workspace.Rebound:Destroy()
+    end
 end
 
-entity.Debug.OnEntityEnteredRoom = function(entityTable, room)
-    print("Entity:", "has entered room:", room)
+entity.Debug.OnEntityDespawned = function(model)
+    print("Entity despawned:", model)
+    cue1:Destroy()
+    cue2:Destroy()
 end
 
-entity.Debug.OnEntityFinishedRebound = function(entityModel)
-    print("Entity finished rebound:", entityModel)
+entity.Debug.OnEntityStartMoving = function(model)
+    print("Entity started moving:", model)
 end
 
 entity.Debug.OnDeath = function()
     warn("You died.")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Guestly%20jumpscare"))()
-wait(1.8)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/check78/GuidingLight/main/MatchDie.txt"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/check78/Jumpscares/main/ReboundJumpscare.txt"))()
+    wait(1.8)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/check78/GuidingLight/main/BoundDie.txt"))()
 end
 
-------------------------
-
--- Run the created entity
+-- Run entity
 Creator.runEntity(entity)
