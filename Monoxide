@@ -26,7 +26,7 @@ local entity = Spawner.createEntity({
     CamShake = {
         Enabled = true,
         Values = {20, 19, 20, 19},
-        Range = 300
+        Range = 100
     },
     ResistCrucifix = false,
     BreakCrucifix = true,
