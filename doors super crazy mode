@@ -104,7 +104,7 @@ coroutine.wrap(function()
         -- Monoxide
 coroutine.wrap(function()
     while true do
-        wait(70)
+        wait(190)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Monoxide"))()
 end
 
@@ -134,7 +134,7 @@ end
 
 end)()
 
--- shocker
+-- Daze
 coroutine.wrap(function()
     while true do
         wait(35)
