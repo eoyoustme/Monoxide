@@ -1,5 +1,3 @@
--- do you want steal this script ok you can steal
-
 local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/DoorEntitySpawn%2BSource'))()
 
 
@@ -7,8 +5,8 @@ local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd
 local entity = Spawner.createEntity({
     CustomName = "G-95", -- Custom name of your entity
     Model = "rbxassetid://77600961930828", -- Can be GitHub file or rbxassetid
-    Speed = 480, -- Percentage, 100 = default Rush speed
-    DelayTime = 2, -- Time before starting cycles (seconds)
+    Speed = 580, -- Percentage, 100 = default Rush speed
+    DelayTime = 0.1, -- Time before starting cycles (seconds)
     HeightOffset = 5,
     CanKill = true,
     NoDieOnCrouching = false,
