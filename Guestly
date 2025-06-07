@@ -1,98 +1,160 @@
--- Lighting effect
-game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(61, 171, 98)
-game.Lighting.MainColorCorrection.Contrast = 0.2
-game.Lighting.MainColorCorrection.Saturation = -0.7
+---====== Define spawner ======---
 
-local TweenService = game:GetService("TweenService")
-TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {Contrast = 0}):Play()
-TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {Saturation = 0}):Play()
-TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
+local Spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V1/Source.lua"))()
 
--- Sound setup
-local cue1 = Instance.new("Sound", workspace)
-cue1.Name = "Scream"
-cue1.SoundId = "rbxassetid://97443546281701"
-cue1.Volume = 0.1
-Instance.new("DistortionSoundEffect", cue1).Level = 1
-Instance.new("PitchShiftSoundEffect", cue1).Octave = 0.5
-cue1:Play()
+---====== Create entity ======---
 
-local cue2 = Instance.new("Sound", workspace)
-cue2.Name = "Spawn"
-cue2.SoundId = "rbxassetid://97443546281701"
-cue2.Volume = 3
-cue2:Play()
-
--- Camera shake setup
-local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
-local camera = workspace.CurrentCamera
-local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
-	camera.CFrame = camera.CFrame * shakeCf
-end)
-camShake:Start()
-camShake:ShakeOnce(10, 3, 0.1, 6, 2, 0.5)
-
--- Delay and speed setup
-local speed = math.random(55, 75)
-local delays = {"2", "2.5", "1.5", "1", "2.1"}
-local selectedDelay = delays[math.random(1, #delays)]
-wait(2.8)
-
--- Load and spawn 1 entity
-local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/DripCapybara/Doors-Mode-Remakes/refs/heads/main/ReboundSpawner.lua"))()
-
-local entity = Creator.createEntity({
+local entity = Spawner.createEntity({
     CustomName = "Guestly",
-    Model = "rbxassetid://12847597717",
-    Speed = speed,
-    DelayTime = selectedDelay,
-    HeightOffset = 0.3,
+    Model = "rbxassetid://138643899461580", -- Your entity's model url here ("rbxassetid://1234567890" or GitHub raw url)
+    Speed = 50,
+    MoveDelay = 4,
+    HeightOffset = 0,
     CanKill = true,
-    BreakLights = false,
-    KillRange = 25,
-    BackwardsMovement = true,
-    FlickerLights = {false, 2.5},
-    Cycles = {Min = 1, Max = 1},
-    CamShake = {true, {5, 15, 0.1, 1}, 100},
-    Jumpscare = {
-        true,
-        {
-            Image1 = "https://www.roblox.com/library/11862656491",
-            Image2 = "https://www.roblox.com/library/11862656491",
-            Shake = false,
-            Sound1 = {0, {Volume = 0.5}},
-            Sound2 = {5567523008, {Volume = 0.5}},
-            Flashing = {true, Color3.fromRGB(6, 38, 135)},
-            Tease = {false, Min = 1, Max = 3}
-        }
+    KillRange = 40,
+    SpawnInFront = true,
+    ShatterLights = true,
+    FlickerLights = {
+        Enabled = false,
+        Duration = 20
     },
-    CustomDialog = {"w"},
+    Cycles = {
+        Min = 1,
+        Max = 1,
+        Delay = 2
+    },
+    CamShake = {
+        Enabled = true,
+        Values = {20, 19, 20, 19},
+        Range = 300
+    },
+    ResistCrucifix = false,
+    BreakCrucifix = true,
+    DeathMessage = {"You died to who called Monoxide", "He is a Really monster", "if you see he say you me is here, Hide NOW!", "You can do it!", "Try better next times!"},
+    IsCuriousLight = true
 })
 
-entity.Debug.OnEntitySpawned = function(model)
-    print("Entity spawned:", model)
-    wait(15)
-    if workspace:FindFirstChild("Rebound") then
-        workspace.Rebound:Destroy()
-    end
+---====== Debug ======---
+
+entity.Debug.OnEntitySpawned = function()
+    print("Entity has spawned")
+local caption = game.Players.LocalPlayer:WaitForChild("PlayerGui").MainUI.MainFrame.Caption
+caption.TextColor3 = Color3.fromRGB(255, 0, 0)
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("I don't like that sound",true)
 end
 
-entity.Debug.OnEntityDespawned = function(model)
-    print("Entity despawned:", model)
-    cue1:Destroy()
-    cue2:Destroy()
+entity.Debug.OnEntityDespawned = function()
+    print("Entity has despawned")
+game.Workspace.Breathing:Destroy()
+game.Workspace.SmilerOst:Destroy()
+
+---====== Load achievement giver ======---
+local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
+
+---====== Display achievement ======---
+achievementGiver({
+    Title = "Im will kill you",
+    Desc = "I will get you soon",
+    Reason = "Encounter TmlnaHRtYXJlIHJlYm91bmQ=",
+    Image = "rbxassetid://75215721863388"
+})
+
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
+game.Lighting.MainColorCorrection.Contrast = 10
+local tween = game:GetService("TweenService")
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+local TweenService = game:GetService("TweenService")
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
+TW:Play()
 end
 
-entity.Debug.OnEntityStartMoving = function(model)
-    print("Entity started moving:", model)
+entity.Debug.OnEntityStartMoving = function()
+    print("Entity started moving")
+end
+
+entity.Debug.OnEntityFinishedRebound = function()
+    print("Entity finished rebound")
+end
+
+entity.Debug.OnEntityEnteredRoom = function(room)
+    print("Entity entered room:", room)
+end
+
+entity.Debug.OnLookAtEntity = function()
+    print("Player looking at entity")
 end
 
 entity.Debug.OnDeath = function()
-    warn("You died.")
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/check78/Jumpscares/main/ReboundJumpscare.txt"))()
-    wait(1.8)
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/check78/GuidingLight/main/BoundDie.txt"))()
+    print("Player has died")
+local shadow = game:GetObjects("rbxassetid://11503625408")[1]
+		local gui = Instance.new("ScreenGui",game.Players.LocalPlayer.PlayerGui)
+        local cue = Instance.new("Sound")
+	cue.Parent = game.Workspace
+	cue.Name = "Spawn"
+	cue.SoundId = "rbxassetid://8325519723"
+	cue.Volume = 3
+	cue.PlaybackSpeed = 0.4
+	cue:Play()
+			shadow.Parent = gui
+			shadow.Visible = true
+			local l__ImageLabel__1 = shadow.ImageLabel;
+			local v2 = Random.new();
+			local l__SizeValue__3 = shadow.SizeValue;
+			local v4 = math.random(1, 6);
+			if v4 == 1 then
+				l__ImageLabel__1.Image = "rbxassetid://17264398849";
+			end;
+			if v4 == 2 then
+				l__ImageLabel__1.Image = "rbxassetid://17264398849";
+			end;
+			if v4 == 3 then
+				l__ImageLabel__1.Image = "rbxassetid://17264398849";
+			end;
+			if v4 == 4 then
+				l__ImageLabel__1.Image = "rbxassetid://17264398849";
+			end;
+			if v4 == 5 then
+				l__ImageLabel__1.Image = "rbxassetid://17264398849";
+			end;
+			if v4 == 6 then
+				l__ImageLabel__1.Image = "rbxassetid://17264398849";
+			end;
+			shadow.Jumpscare:Play();
+			for v5 = 1, 25 do
+				local v6 = math.random(1, 3);
+				if v6 == 1 then
+					shadow.BackgroundColor3 = Color3.new(0, 0, 0);
+					l__ImageLabel__1.ImageColor3 = Color3.new(1, 1, 1);
+				end;
+				if v6 == 2 then
+					shadow.BackgroundColor3 = Color3.new(3, 24, 255);
+					l__ImageLabel__1.ImageColor3 = Color3.new(0, 0, 0);
+				end;
+				if v6 == 3 then
+					shadow.BackgroundColor3 = Color3.new(3, 24, 255);
+					l__ImageLabel__1.ImageColor3 = Color3.new(1, 0, 0);
+				end;
+				l__ImageLabel__1.Position = UDim2.new(v2:NextNumber(0.4, 0.6), 0, v2:NextNumber(0.45, 0.55), 0);
+				l__ImageLabel__1.Size = l__ImageLabel__1.Size + UDim2.new(l__SizeValue__3.Value, 0, l__SizeValue__3.Value, 0);
+				l__ImageLabel__1.Rotation = math.random(-10, 10);
+				l__SizeValue__3.Value = l__SizeValue__3.Value - 0.01;
+				wait(0);
+			end;
+			l__ImageLabel__1.ImageColor3 = Color3.new(1, 1, 1);
+			shadow.BackgroundColor3 = Color3.new(0, 0, 0);
+			shadow.Visible = false;
+			shadow.Jumpscare:Stop()
+
 end
 
--- Run entity
-Creator.runEntity(entity)
+--[[
+    NOTE: By overwriting 'OnUseCrucifix', the default crucifixion will be ignored and this function will be called instead
+
+    entity.Debug.OnUseCrucifix = function()
+        print("Custom crucifixion script here")
+    end
+]]--
+
+---====== Run entity ======---
+
+Spawner.runEntity(entity)
