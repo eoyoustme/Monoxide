@@ -1,0 +1,155 @@
+local entityModel = true
+
+-- Kiểm tra các điều kiện để KHÔNG spawn entity
+local isSeekActive = game.Workspace:FindFirstChild("SeekMovingNewClone") ~= nil
+local isShopRoom = currentRoom and currentRoom:FindFirstChild("Assets") and currentRoom.Assets:FindFirstChild("ShopProps") ~= nil
+local isSpecialRoom = room == 50 or room == 51 or room == 52
+local isNearEnd = room >= 90
+
+if isSeekActive or isSpecialRoom or isShopRoom or isNearEnd then
+    entityModel = false
+end
+
+-- Nếu vẫn cho spawn entity
+if entityModel then
+    -- Âm thanh xuất hiện
+    local cue = Instance.new("Sound")
+    cue.Parent = game.Workspace
+    cue.Name = "Spawn"
+    cue.SoundId = "rbxassetid://9125713308"
+    cue.Volume = 9999
+    cue.PlaybackSpeed = 1
+    cue:Play()
+    wait(1)
+
+    local cue2 = Instance.new("Sound")
+    cue2.Parent = game.Workspace
+    cue2.Name = "Spawn"
+    cue2.SoundId = "rbxassetid://9125712561"
+    cue2.Volume = 9999
+    cue2.PlaybackSpeed = 1
+    cue2:Play()
+
+    -- Không dùng Earthquake / không rung mạnh camera
+    -- Nếu muốn camera shake nhẹ, bạn có thể tùy chỉnh:
+    -- local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+    -- local camara = workspace.CurrentCamera
+    -- local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(Cf)
+    --     camara.CFrame = camara.CFrame * Cf
+    -- end)
+    -- camShake:Start()
+    -- camShake:Shake({Magnitude = 1, Roughness = 2, FadeIn = 0.1, FadeOut = 1})
+
+    -- Tải Entity Spawner
+    local Spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/DoorEntitySpawn%2BSource"))()
+
+    local entity = Spawner.createEntity({
+        CustomName = "Hunger/Hungered",
+        Model = "https://github.com/PABMAXICHAC/doors-monsters-models/blob/main/hunger.rbxm?raw=true",
+        Speed = 300,
+        MoveDelay = 2,
+        HeightOffset = 0,
+        CanKill = true,
+        KillRange = 25,
+        SpawnInFront = false,
+        ShatterLights = true,
+        FlickerLights = {
+            Enabled = true,
+            Duration = 5
+        },
+        Cycles = {
+            Min = 4,
+            Max = 6,
+            Delay = 0.5,
+        },
+        CamShake = {
+            Enabled = false -- Không rung camera
+        },
+        ResistCrucifix = false,
+        BreakCrucifix = true
+    })
+ },
+    Jumpscare = {
+       true, -- Enabled/Disabled
+        {
+            Image1 = "rbxassetid://11394048190", -- Image1 url
+            Image2 = "rbxassetid://11394048190", -- Image2 url
+            Shake = true,
+            Sound1 = {
+                10483790459, -- SoundId
+                { Volume = 0.5 }, -- Sound properties
+            },
+            Sound2 = {
+                10483837590, -- SoundId
+                { Volume = 0.5 }, -- Sound properties
+            },
+            Flashing = {
+                true, -- Enabled/Disabled
+                Color3.fromRGB(255, 255, 255), -- Color
+            },
+            Tease = {
+                false, -- Enabled/Disabled
+                Min = 1,
+                Max = 1,
+            },
+        },
+    },
+    Color = 'GuidingLight', -- CuriousLight ( Yellow ) | GuidingLight ( Blue )
+    DiffrentMessages = false,
+    CustomDialog = {  
+        {"Claim has seen you.", "It will consume anyone on sight.", "It takes a bit to fully spawn in", "so you can use that to your advantage."}, -- Death Messages
+        {"Stop Dieing"},
+        {"Bruh", "Use what you have learned from Rush!"},
+        {"It seems like Template is causing quite the ruckus...", "Hide in a closet or bed as quickly as possible!"},
+         {"I have told You What to do", "YOU JUST HAVE A SKILL ISSUE"}
+    }
+})
+
+    -- Debug các sự kiện
+    entity.Debug.OnEntitySpawned = function()
+        print("Entity has spawned")
+        -- Đã bỏ gọi Earthquake ở đây
+    end
+
+    entity.Debug.OnEntityDespawned = function()
+        print("Entity has despawned")
+        local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
+        achievementGiver({
+            Title = "Too smart",
+            Desc = "ULTRA pro gamer",
+            Reason = "Encounter Hunger/Hungered",
+            Image = "rbxassetid://17787953833"
+        })
+    end
+
+    entity.Debug.OnEntityStartMoving = function()
+        print("Entity started moving")
+    end
+
+    entity.Debug.OnEntityFinishedRebound = function()
+        print("Entity finished rebound")
+    end
+
+    entity.Debug.OnEntityEnteredRoom = function(room)
+        print("Entity entered room:", room)
+    end
+
+    entity.Debug.OnLookAtEntity = function()
+        print("Player looking at entity")
+    end
+
+    entity.Debug.OnDeath = function()
+        print("Player has died")
+        firesignal(game.ReplicatedStorage.RemotesFolder.DeathHint.OnClientEvent, {
+            "You died to Hunger or who call Hungered",
+            "It appears without red room now, but still dangerous.",
+            "He can come back a few times, so hide until it's safe."
+        }, "Blue")
+    end
+
+    -- Delay rồi spawn entity
+    task.delay(13.856, function()
+        Spawner.runEntity(entity)
+        require(game.ReplicatedStorage.ClientModules.Module_Events).tryp(workspace.CurrentRooms, 100)
+    end)
+end
