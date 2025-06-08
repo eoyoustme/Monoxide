@@ -51,14 +51,15 @@ end
 
 entity.Debug.OnEntityDespawned = function()
     print("Entity has despawned")
-wait(3)
-game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
-game.Lighting.MainColorCorrection.Contrast = 10
-local tween = game:GetService("TweenService")
-tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
-local TweenService = game:GetService("TweenService")
-local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
-TW:Play()
+function CustomGitSound(soundlink, vol, filename)
+    local sound = Instance.new("Sound")
+    sound.SoundId = "rbxassetid://1837829565"
+    sound.Parent = workspace
+    sound.Volume = 1
+    sound.PlaybackSpeed = 0.5
+    sound.Name = "Giggling"
+    sound.Looped = true
+   sound:Play()
 end
 
 entity.Debug.OnEntityStartMoving = function()
