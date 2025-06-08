@@ -5,8 +5,8 @@ local Spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/Regul
 ---====== Create entity ======---
 
 local entity = Spawner.createEntity({
-    CustomName = "Nightmare Hungry",
-    Model = "rbxassetid://12635276381", -- Your entity's model url here ("rbxassetid://1234567890" or GitHub raw url)
+    CustomName = "Nightmare CRY man",
+    Model = "rbxassetid://96089307874965", -- Your entity's model url here ("rbxassetid://1234567890" or GitHub raw url)
     Speed = 350,
     MoveDelay = 10,
     HeightOffset = 0,
@@ -40,7 +40,7 @@ entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned")
 local caption = game.Players.LocalPlayer:WaitForChild("PlayerGui").MainUI.MainFrame.Caption
 caption.TextColor3 = Color3.fromRGB(255, 0, 0)
-require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("YOU HAVE 10 SECOND TO HIDE NOW!",true)
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("YOU DIE NOW YOU HAVE 4 SECOND TO HIDE!@@@@@@@@@@!",true)
 end
 
 entity.Debug.OnEntityDespawned = function()
