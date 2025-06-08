@@ -5,14 +5,14 @@ local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd
 local entity = Spawner.createEntity({
     CustomName = "Silence", -- Custom name of your entity
     Model = "rbxassetid://98635922892574", -- Can be GitHub file or rbxassetid
-    Speed = 60, -- Percentage, 100 = default Rush speed
+    Speed = 30, -- Percentage, 100 = default Rush speed
     DelayTime = 0, -- Time before starting cycles (seconds)
     HeightOffset = 0.1,
-    CanKill = false,
+    CanKill = true,
     NoDieOnCrouching = false,
     NoHiding = false,
     AntiCrucifix = false,
-    KillRange = 100,
+    KillRange = 35,
     OneRoom = false,
     DieOnLook = false,
     BreakLights = true,
@@ -22,7 +22,7 @@ local entity = Spawner.createEntity({
         '1',  --- '1'= 'Instant Without Being Looked out' | '2' = 'With Being Looked At'
     },
     FlickerLights = {
-        true, -- Enabled/Disabled
+        false, -- Enabled/Disabled
         4 -- Time (seconds)
     },
     Cycles = {
@@ -52,7 +52,7 @@ local entity = Spawner.createEntity({
             },
             Flashing = {
                 true, -- Enabled/Disabled
-                Color3.fromRGB(58, 203, 255), -- Color
+                Color3.fromRGB(0, 0, 0), -- Color
             },
             Tease = {
                 false, -- Enabled/Disabled
