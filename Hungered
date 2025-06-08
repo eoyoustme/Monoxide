@@ -40,7 +40,7 @@ entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned")
 local caption = game.Players.LocalPlayer:WaitForChild("PlayerGui").MainUI.MainFrame.Caption
 caption.TextColor3 = Color3.fromRGB(255, 0, 0)
-require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("I don't like that sound",true)
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("",true)
 end
 
 entity.Debug.OnEntityDespawned = function()
@@ -91,9 +91,9 @@ local shadow = game:GetObjects("rbxassetid://11503625408")[1]
         local cue = Instance.new("Sound")
 	cue.Parent = game.Workspace
 	cue.Name = "Spawn"
-	cue.SoundId = "rbxassetid://8325519723"
+	cue.SoundId = "rbxassetid://11394048190"
 	cue.Volume = 3
-	cue.PlaybackSpeed = 0.4
+	cue.PlaybackSpeed = 1
 	cue:Play()
 			shadow.Parent = gui
 			shadow.Visible = true
