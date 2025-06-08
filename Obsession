@@ -54,8 +54,8 @@ local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 ---====== Display achievement ======---
 achievementGiver({
-    Title = "Stop Staring",
+    Title = "Don't look me",
     Desc = "Last chance to not look at me",
-    Reason = "Encounter Black Hole",
+    Reason = "Encounter Obsession",
     Image = "rbxassetid://97059893535136"
 })
