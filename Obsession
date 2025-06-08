@@ -54,7 +54,7 @@ local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 ---====== Display achievement ======---
 achievementGiver({
-    Title = "Don't look me",
+    Title = "Lokk at me quangcat",
     Desc = "Last chance to not look at me",
     Reason = "Encounter Obsession",
     Image = "rbxassetid://97059893535136"
