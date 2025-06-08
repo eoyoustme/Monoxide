@@ -5,15 +5,15 @@ local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd
 local entity = Spawner.createEntity({
     CustomName = "Silence", -- Custom name of your entity
     Model = "rbxassetid://98635922892574", -- Can be GitHub file or rbxassetid
-    Speed = 1, -- Percentage, 100 = default Rush speed
-    DelayTime = 2, -- Time before starting cycles (seconds)
-    HeightOffset = 7,
+    Speed = 60, -- Percentage, 100 = default Rush speed
+    DelayTime = 0, -- Time before starting cycles (seconds)
+    HeightOffset = 0.1,
     CanKill = false,
-    NoDieOnCrouching = true,
+    NoDieOnCrouching = false,
     NoHiding = false,
     AntiCrucifix = false,
     KillRange = 100,
-    OneRoom = true,
+    OneRoom = false,
     DieOnLook = false,
     BreakLights = true,
     BackwardsMovement = false,
@@ -92,9 +92,9 @@ local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 ---====== Display achievement ======---
 achievementGiver({
-    Title = "STOP OPEN YOUR MOUTH",
-    Desc = "CLOSE YOUR MOUTH PLEASE",
-    Reason = "Survive the Entity Depth",
+    Title = "listen me",
+    Desc = "im go  to sleep",
+    Reason = "Survive the Entity silence",
     Image = "rbxassetid://12545106439"
 })
 Followed:Destroy()
