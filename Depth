@@ -4,8 +4,8 @@ local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd
 -- Create entity
 local entity = Spawner.createEntity({
     CustomName = "Depth", -- Custom name of your entity
-    Model = "rbxassetid://97007827073901", -- Can be GitHub file or rbxassetid
-    Speed = 110, -- Percentage, 100 = default Rush speed
+    Model = "rbxassetid://112671572923718", -- Can be GitHub file or rbxassetid
+    Speed = 150, -- Percentage, 100 = default Rush speed
     DelayTime = 5, -- Time before starting cycles (seconds)
     HeightOffset = 0.1,
     CanKill = true,
@@ -39,8 +39,8 @@ local entity = Spawner.createEntity({
         true, -- Enabled/Disabled
         {
             Type = "1", -- "Normal" or 1 | "Pop" or 2 | "endlessdoorsrebound" or "Rebound" or 3 | More coming Soon
-            Image1 = "rbxassetid://14546302778", -- Image1 url
-            Image2 = "rbxassetid://13328029517", -- Image2 url
+            Image1 = "rbxassetid://12545106439", -- Image1 url
+            Image2 = "rbxassetid://12545106439", -- Image2 url
             Shake = true,
             Sound1 = {
                 "0", -- SoundId Link or Roblox ID
@@ -95,7 +95,7 @@ achievementGiver({
     Title = "STOP OPEN YOUR MOUTH",
     Desc = "CLOSE YOUR MOUTH PLEASE",
     Reason = "Survive the Entity Depth",
-    Image = "rbxassetid://3100736018"
+    Image = "rbxassetid://12545106439"
 })
 Followed:Destroy()
 end
