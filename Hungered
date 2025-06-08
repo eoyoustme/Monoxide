@@ -5,14 +5,14 @@ local Spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/Regul
 ---====== Create entity ======---
 
 local entity = Spawner.createEntity({
-    CustomName = "Hunger",
-    Model = "rbxassetid://132578806590431", -- Your entity's model url here ("rbxassetid://1234567890" or GitHub raw url)
+    CustomName = "Hunger/Hungered",
+    Model = "rbxassetid://96360347693213", -- Your entity's model url here ("rbxassetid://1234567890" or GitHub raw url)
     Speed = 300,
     MoveDelay = 14,
     HeightOffset = 0,
     CanKill = true,
-    KillRange = 40,
-    SpawnInFront = true,
+    KillRange = 25,
+    SpawnInFront = false,
     ShatterLights = true,
     FlickerLights = {
         Enabled = false,
