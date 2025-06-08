@@ -36,7 +36,7 @@ local entity = Spawner.createEntity({
         100, -- Shake start distance (from Entity to you)
     },
     Jumpscare = {
-        true, -- Enabled/Disabled
+        false, -- Enabled/Disabled
         {
             Type = "1", -- "Normal" or 1 | "Pop" or 2 | "endlessdoorsrebound" or "Rebound" or 3 | More coming Soon
             Image1 = "rbxassetid://14546302778", -- Image1 url
