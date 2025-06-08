@@ -110,13 +110,13 @@ end
 
 end)()
 
---overseer
+--Black Hole
 coroutine.wrap(function()
     while true do
         wait(150)
         game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
         wait(0)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/DripCapybara/Doors-Mode-Remakes/refs/heads/main/Overseer.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Black%20Hole"))()
 
 end
 
@@ -125,7 +125,7 @@ end)()
 --darkness
 coroutine.wrap(function()
     while true do
-        wait(150)
+        wait(1500)
         game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
         wait(0)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/localplayerr/Doors-stuff/refs/heads/main/Immersive%20mode/Darkness"))()
