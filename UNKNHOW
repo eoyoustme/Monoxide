@@ -1,113 +1,170 @@
----====== Load spawner ======---
+local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/DoorEntitySpawn%2BSource'))()
 
-local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
-local Change = true
-local plr = game.Players.LocalPlayer
-local chr = plr.Character or plr.CharacterAdded:Wait()
-local cf = chr.HumanoidRootPart.CFrame * CFrame.new(0, 0, 10)
 
----====== Create entity ======---
-
-local entity = spawner.Create({
-	Entity = {
-		Name = "Nightmare Glitch",
-		Asset = "rbxassetid://115181693307607",
-		HeightOffset = 3
-	},
-	Lights = {
-		Flicker = {
-			Enabled = true,
-			Duration = 500
-		},
-		Shatter = false,
-		Repair = false
-	},
-	Earthquake = {
-		Enabled = false
-	},
-	CameraShake = {
-		Enabled = true,
-		Range = 130,
-		Values = {9, 20, 0.1, 1} -- Magnitude, Roughness, FadeIn, FadeOut
-	},
-	Movement = {
-		Speed = 150,
-		Delay = 7,
-		Reversed = false
-	},
-	Rebounding = {
-		Enabled = true,
-		Type = "Ambush", -- "Blitz"
-		Min = 10,
-		Max = 10,
-		Delay = 0.001
-	},
-	Damage = {
-		Enabled = true,
-		Range = 100,
-		Amount = 0.01
-	},
-	Crucifixion = {
-		Enabled = true,
-		Range = 40,
-		Resist = false,
-		Break = true
-	},
-	Death = {
-		Type = "Guiding", -- "Curious"
-		Hints = {"Death", "Hints", "Go", "Here"},
-		Cause = ""
-	}
+-- Create entity
+local entity = Spawner.createEntity({
+    CustomName = "Nightmare glitch", -- Custom name of your entity
+    Model = "rbxassetid://115181693307607", -- Can be GitHub file or rbxassetid
+    Speed = 170, -- Percentage, 100 = default Rush speed
+    DelayTime = 5, -- Time before starting cycles (seconds)
+    HeightOffset = 0.1,
+    CanKill = true,
+    NoDieOnCrouching = false,
+    NoHiding = false,
+    AntiCrucifix = false,
+    KillRange = 40,
+    OneRoom = false,
+    DieOnLook = false,
+    BreakLights = true,
+    BackwardsMovement = false,
+     MovementDeath = {
+        false, -- Turned On?
+        '1',  --- '1'= 'Instant Without Being Looked out' | '2' = 'With Being Looked At'
+    },
+    FlickerLights = {
+        true, -- Enabled/Disabled
+        4 -- Time (seconds)
+    },
+    Cycles = {
+        Min = 10,
+        Max = 10,
+        WaitTime = 2,
+    },
+    CamShake = {
+        true, -- Enabled/Disabled
+        {3.5, 20, 0.1, 1}, -- Shake values (don't change if you don't know)
+        100, -- Shake start distance (from Entity to you)
+    },
+    Jumpscare = {
+        true, -- Enabled/Disabled
+        {
+            Type = "1", -- "Normal" or 1 | "Pop" or 2 | "endlessdoorsrebound" or "Rebound" or 3 | More coming Soon
+            Image1 = "rbxassetid://12545106439", -- Image1 url
+            Image2 = "rbxassetid://12545106439", -- Image2 url
+            Shake = true,
+            Sound1 = {
+                "0", -- SoundId Link or Roblox ID
+                { Volume = 0 }, -- Sound properties
+            },
+            Sound2 = {
+                "5263560566", -- SoundId Link or Roblox ID
+                { Volume = 3 }, -- Sound properties
+            },
+            Flashing = {
+                true, -- Enabled/Disabled
+                Color3.fromRGB(58, 203, 255), -- Color
+            },
+            Tease = {
+                false, -- Enabled/Disabled
+                Min = 1,
+                Max = 1,
+            },
+        },
+    },
+    Color = 'GuidingLight', -- CuriousLight ( Yellow ) | GuidingLight ( Blue )
+    DiffrentMessages = false,
+    CustomDialog = {  
+        {"Claim has seen you.", "It will consume anyone on sight.", "It takes a bit to fully spawn in", "so you can use that to your advantage."}, -- Death Messages
+        {"Stop Dieing"},
+        {"Bruh", "Use what you have learned from Rush!"},
+        {"It seems like Template is causing quite the ruckus...", "Hide in a closet or bed as quickly as possible!"},
+         {"I have told You What to do", "YOU JUST HAVE A SKILL ISSUE"}
+    }
 })
 
----====== Debug entity ======---
+-----[[ Advanced Sctipting ]]-----
 
-entity:SetCallback("OnSpawned", function()
-    print("Entity has spawned")
-    local redtweeninfo = TweenInfo.new(3)
-local redinfo = {Color = Color3.fromRGB(110, 0, 110)}
-
-----------
-while Change == true do wait(1)
-for i,v in pairs(workspace.CurrentRooms:GetDescendants()) do
-			if v:IsA("Light") then
-					game.TweenService:Create(v,redtweeninfo,redinfo):Play()
-					if v.Parent.Name == "LightFixture" then
-						    game.TweenService:Create(v.Parent,redtweeninfo,redinfo):Play()
-					end
-		  end
+entity.Debug.OnEntityMoving = function(Invincible,Hiding,plrCollisionPoint)
+print("Invincible: "..tostring(Invincible))
+print("Player to Entity Collision (None hiding Point): "..tostring(plrCollisionPoint))
+print("Hiding: "..tostring(Hiding))
 end
+       
+entity.Debug.OnEntitySpawned = function()
+    print("Entity has spawned:")
+local cue2 = Instance.new("Sound")
+    cue2.Parent = game.Workspace
+    cue2.Name = "Spawn"
+    cue2.SoundId = "rbxassetid://3359047385"
+    cue2.Volume = 4.5
+    cue2.PlaybackSpeed = 1
+    cue2:Play()
 end
-end)
-entity:SetCallback("OnDespawning", function()
-    Change = false
-end)
 
-entity:SetCallback("OnDamagePlayer", function(newHealth)
-	if newHealth == 0 then
-		print("Entity has killed the player")
-	else
-		print("Entity has damaged the player")
-local Camera = workspace.CurrentCamera
-local RunService = game:GetService("RunService")
-local lockOn = game.Workspace.threat.ThreatMoving
-local C = game.Players.LocalPlayer.Character:WaitForChild("Collision")
-C.Anchored = true
-lockOn.CFrame = cf
-lockOn.Anchored = false
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
+game.Lighting.MainColorCorrection.Contrast = 10
+local tween = game:GetService("TweenService")
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+local TweenService = game:GetService("TweenService")
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(110, 0, 110)})
+TW:Play()
+wait(1)
 
-local a = game:GetService("RunService").RenderStepped:Connect(function()
-	Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, lockOn.Position)
-end)
-
+entity.Debug.OnEntityDespawned = function()
+    print("Entity has despawned:")
 wait(3)
-a:Disconnect()
-game.Workspace.threat:Destroy()
-		game.Players.LocalPlayer.Character.Humanoid:TakeDamage(1000)
-        game:GetService("ReplicatedStorage").GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "Threat"
-	end
-end)
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
+game.Lighting.MainColorCorrection.Contrast = 10
+local tween = game:GetService("TweenService")
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+local TweenService = game:GetService("TweenService")
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
+TW:Play()
+---====== Load achievement giver ======---
+local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
 
----====== Run entity ======---
+---====== Display achievement ======---
+achievementGiver({
+    Title = "GLITCH GLITCH GLITCH",
+    Desc = "I GLITCH WGLITCH KILL GLITCH",
+    Reason = "Survive the Entity nightmare gltich",
+    Image = "rbxassetid://"
+})
+Followed:Destroy()
+end
 
-entity:Run()
+entity.Debug.OnEntityFinishedRebound = function()
+    print("Entity has finished rebound:")
+end
+
+entity.Debug.OnEntityEnteredRoom = function(entityTable, room)
+    print("Entity:", "has entered room:",room)
+end
+
+entity.Debug.OnLookAtEntity = function()
+    print("Player has looked at entity:")
+end
+
+entity.Debug.OnDeath = function()
+    warn("Player has died.")
+    local func, setupval, getinfo, typeof, getgc, next = nil, debug.setupvalue or setupvalue, debug.getinfo or getinfo, typeof, getgc, next
+
+for i,v in next, getgc(false) do
+    if typeof(v) == "function" then
+        local info = getinfo(v)
+        if info.currentline == 54 and info.nups == 2 and info.is_vararg == 0 then
+            func = v
+            break
+        end
+    end
+end
+
+local function DeathHint(hints, type: string)
+    setupval(func, 1, hints)
+    if type ~= nil then
+        setupval(func, 2, type)
+    end
+end
+
+DeathHint({
+    "You died to who you Call G-95",
+    "This Entity its So Faster So try Hide",
+    "Its from to hell He Make YoU Suffer",
+    "..-so avoid Eye Contact"
+}, "Blue") -- "Blue" or "Yellow"
+end
+
+------------------------
+
+-- Run the created entity
+Spawner.runEntity(entity)
