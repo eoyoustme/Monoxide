@@ -34,7 +34,7 @@ cue1:Play()
 local cue2 = Instance.new("Sound")
 cue2.Parent = game.Workspace
 cue2.Name = "Spawn"
-cue2.SoundId = "rbxassetid://rbxassetid://9114038441"
+cue2.SoundId = "rbxassetid://9114038441"
 cue2.Volume = 9999
 local pitch = Instance.new("PitchShiftSoundEffect")
 pitch.Parent = cue2
@@ -80,7 +80,7 @@ local entity = Creator.createEntity({
         100, -- Shake start distance (from Entity to you)
     },
     Jumpscare = {
-        false, -- Enabled ('false' if you don't want jumpscare)
+        true, -- Enabled ('false' if you don't want jumpscare)
         {
             Image1 = "https://www.roblox.com/library/11862656491", -- Image1 url
             Image2 = "https://www.roblox.com/library/11862656491", -- Image2 url
@@ -157,7 +157,7 @@ local entity = Creator.createEntity({
         100, -- Shake start distance (from Entity to you)
     },
     Jumpscare = {
-        false, -- Enabled ('false' if you don't want jumpscare)
+        true, -- Enabled ('false' if you don't want jumpscare)
         {
             Image1 = "https://www.roblox.com/library/11862656491", -- Image1 url
             Image2 = "https://www.roblox.com/library/11862656491", -- Image2 url
@@ -234,7 +234,7 @@ local entity = Creator.createEntity({
         100, -- Shake start distance (from Entity to you)
     },
     Jumpscare = {
-        false, -- Enabled ('false' if you don't want jumpscare)
+        true, -- Enabled ('false' if you don't want jumpscare)
         {
             Image1 = "https://www.roblox.com/library/11862656491", -- Image1 url
             Image2 = "https://www.roblox.com/library/11862656491", -- Image2 url
@@ -311,7 +311,7 @@ local entity = Creator.createEntity({
         100, -- Shake start distance (from Entity to you)
     },
     Jumpscare = {
-        false, -- Enabled ('false' if you don't want jumpscare)
+        true, -- Enabled ('false' if you don't want jumpscare)
         {
             Image1 = "https://www.roblox.com/library/11862656491", -- Image1 url
             Image2 = "https://www.roblox.com/library/11862656491", -- Image2 url
@@ -388,7 +388,7 @@ local entity = Creator.createEntity({
         100, -- Shake start distance (from Entity to you)
     },
     Jumpscare = {
-        false, -- Enabled ('false' if you don't want jumpscare)
+        true, -- Enabled ('false' if you don't want jumpscare)
         {
             Image1 = "https://www.roblox.com/library/11862656491", -- Image1 url
             Image2 = "https://www.roblox.com/library/11862656491", -- Image2 url
