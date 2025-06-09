@@ -5,7 +5,7 @@ tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 
 local TweenService = game:GetService("TweenService")
 local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 0, 0)})
 TW:Play()
-wait(0)
+wait(5)
 
 ---====== Define spawner ======---
 
@@ -67,7 +67,7 @@ local cue2 = Instance.new("Sound")
     cue2:Play()
 end
 
-wait(16)
+wait(3)
 game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 0, 0)
 game.Lighting.MainColorCorrection.Contrast = 10
 local tween = game:GetService("TweenService")
@@ -90,7 +90,7 @@ end
 
 entity.Debug.OnLookAtEntity = function()
     print("Player looking at entity")
-game.Players.LocalPlayer.Character.Humanoid:TakeDamage(20)
+game.Players.LocalPlayer.Character.Humanoid:TakeDamage(4)
 end
 
 entity.Debug.OnDeath = function()
