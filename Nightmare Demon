@@ -90,6 +90,7 @@ end
 
 entity.Debug.OnLookAtEntity = function()
     print("Player looking at entity")
+game.Players.LocalPlayer.Character.Humanoid:TakeDamage(20)
 end
 
 entity.Debug.OnDeath = function()
