@@ -98,7 +98,7 @@ tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 
 local TweenService = game:GetService("TweenService")
 local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(0, 255, 0})
 TW:Play()
-wait(0.5)
+wait(3)
 
 entity.Debug.OnEntityDespawned = function()
     print("Entity has despawned:")
