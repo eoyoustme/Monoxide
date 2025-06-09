@@ -75,6 +75,17 @@ tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 
 local TweenService = game:GetService("TweenService")
 local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
 TW:Play()
+---====== Load achievement giver ======---
+local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
+
+---====== Display achievement ======---
+achievementGiver({
+    Title = "GLITCH GLITCH GLITCH",
+    Desc = "I GLITCH WGLITCH KILL GLITCH",
+    Reason = "Survive the Entity nightmare gltich",
+    Image = "rbxassetid://"
+})
+Followed:Destroy()
 
 entity.Debug.OnEntityStartMoving = function()
     print("Entity started moving")
