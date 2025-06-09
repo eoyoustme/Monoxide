@@ -75,7 +75,6 @@ tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 
 local TweenService = game:GetService("TweenService")
 local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
 TW:Play()
-end
 
 entity.Debug.OnEntityStartMoving = function()
     print("Entity started moving")
