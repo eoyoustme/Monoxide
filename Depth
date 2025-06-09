@@ -82,6 +82,15 @@ end
        
 entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned:")
+local cue2 = Instance.new("Sound")
+    cue2.Parent = game.Workspace
+    cue2.Name = "Spawn"
+    cue2.SoundId = "rbxassetid://926058764"
+    cue2.Volume = 4.5
+    cue2.PlaybackSpeed = 0.89
+    cue2:Play()
+end
+
 game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
 game.Lighting.MainColorCorrection.Contrast = 10
 local tween = game:GetService("TweenService")
@@ -89,7 +98,7 @@ tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 
 local TweenService = game:GetService("TweenService")
 local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(0, 0, 255)})
 TW:Play()
-wait(5)
+wait(1)
 
 entity.Debug.OnEntityDespawned = function()
     print("Entity has despawned:")
