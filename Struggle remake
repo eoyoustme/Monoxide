@@ -51,6 +51,7 @@ end
 
 entity.Debug.OnEntityDespawned = function()
     print("Entity has despawned")
+wait(3)
 game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
 game.Lighting.MainColorCorrection.Contrast = 10
 local tween = game:GetService("TweenService")
