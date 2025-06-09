@@ -66,18 +66,6 @@ local cue2 = Instance.new("Sound")
     cue2.PlaybackSpeed = 0.5
     cue2:Play()
 end
----====== Load achievement giver ======---
-local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
-
----====== Display achievement ======---
-achievementGiver({
-    Title = "Disturbance is here",
-    Desc = "He is friend or clone of Ripper?",
-    Reason = "Survive the Entity Struggle",
-    Image = "rbxassetid://"
-})
-Followed:Destroy()
-end
 
 wait(3)
 game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
