@@ -93,7 +93,7 @@ local shadow = game:GetObjects("rbxassetid://11503625408")[1]
         local cue = Instance.new("Sound")
 	cue.Parent = game.Workspace
 	cue.Name = "Spawn"
-	cue.SoundId = "rbxassetid://8325519723"
+	cue.SoundId = "rbxassetid://10483837590"
 	cue.Volume = 3
 	cue.PlaybackSpeed = 0.4
 	cue:Play()
