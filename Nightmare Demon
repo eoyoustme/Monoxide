@@ -5,7 +5,7 @@ tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 
 local TweenService = game:GetService("TweenService")
 local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 0, 0)})
 TW:Play()
-wait(5)
+wait(0.1)
 
 ---====== Define spawner ======---
 
