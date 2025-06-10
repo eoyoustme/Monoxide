@@ -6,7 +6,7 @@ local entity = Spawner.createEntity({
     CustomName = "Mananic Ambush", -- Custom name of your entity
     Model = "rbxassetid://100839143460681", -- Can be GitHub file or rbxassetid
     Speed = 180, -- Percentage, 100 = default Rush speed
-    DelayTime = 7, -- Time before starting cycles (seconds)
+    DelayTime = 9, -- Time before starting cycles (seconds)
     HeightOffset = 0.1,
     CanKill = true,
     NoDieOnCrouching = false,
@@ -82,6 +82,13 @@ end
        
 entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned:")
+local cue2 = Instance.new("Sound")
+    cue2.Parent = game.Workspace
+    cue2.Name = "Spawn"
+    cue2.SoundId = "rbxassetid://134020218579308"
+    cue2.Volume = 4.5
+    cue2.PlaybackSpeed = 0.7
+    cue2:Play()
 end
 
 entity.Debug.OnEntityDespawned = function()
