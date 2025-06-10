@@ -2,7 +2,7 @@ local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd
 
 -- === CẢNH BÁO TRƯỚC KHI ENTITY XUẤT HIỆN ===
 local warningSound = Instance.new("Sound")
-warningSound.SoundId = "rbxassetid://6314880174" -- Thay bằng ID âm thanh cảnh báo của bạn
+warningSound.SoundId = "rbxassetid://88931316349582" -- Thay bằng ID âm thanh cảnh báo của bạn
 warningSound.Volume = 2
 warningSound.Parent = workspace
 warningSound:Play()
