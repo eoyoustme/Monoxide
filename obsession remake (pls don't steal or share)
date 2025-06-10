@@ -10,7 +10,7 @@ if game.Workspace:FindFirstChild("SeekMovingNewClone") or
 end
 
 local Kill = true
-local depthsTer = game:GetObjects("rbxassetid://99977960413546")[1] -- Load DepthsTer from the ID
+local depthsTer = game:GetObjects("rbxassetid://93714544847057")[1] -- Load DepthsTer from the ID
 depthsTer.Parent = game.Workspace
 
 local part = depthsTer:FindFirstChildWhichIsA("BasePart") or depthsTer:FindFirstChildWhichIsA("Part")
@@ -22,13 +22,13 @@ wait(3)
 
 task.spawn(function()
     while Kill == true do
-        task.wait(0.00001)  -- Reduce the wait time to increase damage speed
+        task.wait(0.000000000000000000000000000000000000000000000001)  -- Reduce the wait time to increase damage speed
         local _, camera = game.Workspace.CurrentCamera:WorldToViewportPoint(part.Position)
         
         -- If the player is not looking at DepthTer, they take damage
         if not camera then
 
-game.Players.LocalPlayer.Character.Humanoid:TakeDamage(5)
+game.Players.LocalPlayer.Character.Humanoid:TakeDamage(0.001)
                   end
         
         -- If the player dies, update the death cause and show the death hint
