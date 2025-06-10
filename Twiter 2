@@ -91,8 +91,8 @@ local function playWarningSound()
     return warningSound
 end
 
-entity.Debug.OnEntitySpawned = function()
-    print("Entity has Despawned:")
+entity.Debug.OnEntityDespawned = function()
+    print("Entity has despawned")
 ---====== Load achievement giver ======---
 local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
 
@@ -150,9 +150,20 @@ entity.Debug.OnDeath = function()
 
     -- Shutdown toàn bộ game sau khi người chơi chết
     for _, plr in pairs(game.Players:GetPlayers()) do
-        plr:Kick("Game Over. You were consumed by Depth.")
+        plr:Kick("Game Over. You get die by Twiter.")
     end
 end
+
+local function playWarningSound()
+    local warningSound = Instance.new("Sound")
+    warningSound.Parent = workspace
+    warningSound.SoundId = "rbxassetid://SOUND_ID_CUA_BAN" -- Thay bằng ID âm thanh cảnh báo
+    warningSound.Volume = 5
+    warningSound:Play()
+    return warningSound
+end
+
+wait(5)
 
 ------------------------
 
