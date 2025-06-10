@@ -25,7 +25,7 @@ local entity = Spawner.createEntity({
     },
     CamShake = {
         Enabled = true,
-        Values = {20, 19, 20, 19},
+        Values = {10, 9, 10, 9},
         Range = 100
     },
     ResistCrucifix = false,
@@ -67,6 +67,7 @@ achievementGiver({
     Image = "rbxassetid://139428690092079"
 })
 
+wait(3)
 game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
 game.Lighting.MainColorCorrection.Contrast = 10
 local tween = game:GetService("TweenService")
@@ -74,7 +75,6 @@ tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 
 local TweenService = game:GetService("TweenService")
 local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
 TW:Play()
-end
 
 entity.Debug.OnEntityStartMoving = function()
     print("Entity started moving")
