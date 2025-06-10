@@ -1,4 +1,4 @@
-local shadow=game:GetObjects("rbxassetid://11631916882")[1]
+local shadow=game:GetObjects("rbxassetid://109892271786493")1]
 shadow.Parent = game.Players.LocalPlayer.Backpack
 local Players = game:GetService("Players")
 local Plr = Players.LocalPlayer
@@ -8,7 +8,7 @@ local RightArm = Char:WaitForChild("RightUpperArm")
 local LeftArm = Char:WaitForChild("LeftUpperArm")
 local RightC1 = RightArm.RightShoulder.C1
 local LeftC1 = LeftArm.LeftShoulder.C1
-        local function setupCrucifix(tool)
+        local function setupCandle(tool)
         RightArm.Name = "R_Arm"
         LeftArm.Name = "L_Arm"
         
