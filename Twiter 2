@@ -17,7 +17,7 @@ end
 -- === SAU KHI VÀO PHÒNG MỚI, ENTITY SẼ ĐƯỢC TRIỆU HỒI ===
 local entity = Spawner.createEntity({
     CustomName = "Twiter",
-    Model = "rbxassetid://107664078695666",
+    Model = "rbxassetid://88931316349582",
     Speed = 150,
     DelayTime = 3,
     HeightOffset = 0.1,
