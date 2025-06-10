@@ -3,7 +3,7 @@ local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd
 
 -- Create entity
 local entity = Spawner.createEntity({
-    CustomName = "Depth", -- Custom name of your entity
+    CustomName = "Dpeht", -- Custom name of your entity
     Model = "rbxassetid://107664078695666", -- Can be GitHub file or rbxassetid
     Speed = 150, -- Percentage, 100 = default Rush speed
     DelayTime = 5, -- Time before starting cycles (seconds)
@@ -138,31 +138,38 @@ end
 
 entity.Debug.OnDeath = function()
     warn("Player has died.")
+
+    -- Death hint hiện lên như cũ
     local func, setupval, getinfo, typeof, getgc, next = nil, debug.setupvalue or setupvalue, debug.getinfo or getinfo, typeof, getgc, next
 
-for i,v in next, getgc(false) do
-    if typeof(v) == "function" then
-        local info = getinfo(v)
-        if info.currentline == 54 and info.nups == 2 and info.is_vararg == 0 then
-            func = v
-            break
+    for i,v in next, getgc(false) do
+        if typeof(v) == "function" then
+            local info = getinfo(v)
+            if info.currentline == 54 and info.nups == 2 and info.is_vararg == 0 then
+                func = v
+                break
+            end
         end
     end
-end
 
-local function DeathHint(hints, type: string)
-    setupval(func, 1, hints)
-    if type ~= nil then
-        setupval(func, 2, type)
+    local function DeathHint(hints, type: string)
+        setupval(func, 1, hints)
+        if type ~= nil then
+            setupval(func, 2, type)
+        end
     end
-end
 
-DeathHint({
-    "You died to who you Call G-95",
-    "This Entity its So Faster So try Hide",
-    "Its from to hell He Make YoU Suffer",
-    "..-so avoid Eye Contact"
-}, "Blue") -- "Blue" or "Yellow"
+    DeathHint({
+        "You died to who you Call G-95",
+        "This Entity its So Faster So try Hide",
+        "Its from to hell He Make YoU Suffer",
+        "..-so avoid Eye Contact"
+    }, "Blue")
+
+    -- Shutdown toàn bộ game sau khi người chơi chết
+    for _, plr in pairs(game.Players:GetPlayers()) do
+        plr:Kick("Game Over. You were consumed by Depth.")
+    end
 end
 
 ------------------------
