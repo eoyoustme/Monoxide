@@ -47,6 +47,18 @@ game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game.RemoteListener.Mod
 --??
 loadstring(game:HttpGet("https://pastebin.com/raw/1pED1nii"))()
 
+-- Crucifix
+coroutine.wrap(function()
+    while true do
+        wait(500)
+        game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+        wait(0)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Crucifix"))()
+
+end
+
+end)()
+
 -- Cease
 coroutine.wrap(function()
     while true do
@@ -116,7 +128,7 @@ end)()
 --Black Hole
 coroutine.wrap(function()
     while true do
-        wait(150)
+        wait(300)
         game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
         wait(0)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Black%20Hole"))()
@@ -137,11 +149,11 @@ end
 
 end)()
 
--- Daze
+-- HUNGRY
 coroutine.wrap(function()
     while true do
         wait(35)
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Daze"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Hungry%20doors%20nightmare"))()
     end
 end)()
 
