@@ -82,6 +82,15 @@ end
        
 entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned:")
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(0, 255, 0)
+game.Lighting.MainColorCorrection.Contrast = 0.2
+game.Lighting.MainColorCorrection.Saturation = -0.7
+local tween = game:GetService("TweenService")
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {Contrast = 0}):Play()
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {Saturation = 0}):Play()
+local TweenService = game:GetService("TweenService")
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
+TW:Play()
 end
 
 entity.Debug.OnEntityDespawned = function()
