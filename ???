@@ -57,7 +57,7 @@ local entityList = {
     {url = "https://raw.githubusercontent.com/localplayerr/Doors-stuff/refs/heads/main/Immersive%20mode/Darkness", delay = 1500},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Hungry%20doors%20nightmare", delay = 35},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Terror", delay = 490},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Pandemonium", delay = 301},
+    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Pandemonium", delay = 1001},
     {url = "https://raw.githubusercontent.com/vick-png/Wh1t3-spawn/refs/heads/main/Whatt", delay = 40},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Guestly", delay = 220},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/G-95", delay = 380},
