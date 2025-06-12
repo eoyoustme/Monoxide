@@ -172,7 +172,7 @@ end)()
 --Retired Lord
 coroutine.wrap(function()
     while true do
-        wait(341)
+        wait(301)
         game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
         wait(0)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Pandemonium"))()
@@ -208,7 +208,7 @@ end)()
 -- G-95
 coroutine.wrap(function()
     while true do
-        wait(950)
+        wait(380)
         game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
         wait(0)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/G-95"))()
@@ -218,7 +218,7 @@ end)()
 -- A-60 (rooms)
 coroutine.wrap(function()
     while true do
-        wait(120)
+        wait(250)
         game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
         wait(0)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-60%20for%20doors%20spawn"))()
@@ -233,7 +233,7 @@ coroutine.wrap(function()
         wait(666)
         game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
         wait(0)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-60%20for%20doors%20spawn"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/DEMON"))()
 
 end
 
