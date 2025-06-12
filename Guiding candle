@@ -1,3 +1,6 @@
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("super crazy mode is now active ",true)
+wait(5) require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("This Guiding candle is in test",true)
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Functions.lua"))()
     local tool = LoadCustomInstance("rbxassetid://109892271786493")
     tool.Parent = game:GetService("Players").LocalPlayer.Backpack
