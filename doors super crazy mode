@@ -247,7 +247,7 @@ coroutine.wrap(function()
         wait(450)
         game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
         wait(0)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/DEMON"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Twiter%20remake"))()
 
 end
 
@@ -259,7 +259,7 @@ coroutine.wrap(function()
         wait(480)
         game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
         wait(0)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/DEMON"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Twiter%202"))()
 
 end
 
