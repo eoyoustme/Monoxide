@@ -1,78 +1,80 @@
 local plr = game.Players.LocalPlayer
 local chr = plr.Character or plr.CharacterAdded:Wait()
-local cam = workspace.CurrentCamera
-local offsetgyat = 15
-local TweenService = game:GetService("TweenService")
-local hum = chr:FindFirstChild("Humanoid")
-local Move = true 
+local humrp = chr:WaitForChild("HumanoidRootPart")
+local RunService = game:GetService("RunService")
 
-local Figure = game:GetObjects("rbxassetid://131080992307213")[1]
-Figure.Parent = workspace
-local primary_part = Figure:FindFirstChildWhichIsA("BasePart") or Interruption:FindFirstChildWhichIsA("Part")
-Figure.PrimaryPart = primary_part
-Figure:SetPrimaryPartCFrame(chr.HumanoidRootPart.CFrame * CFrame.new(0, 0, 50))
+local speed = 50
+local Move = true
 
--- Change
+-- Tải Deer God model
+local DeerGod = game:GetObjects("rbxassetid://131080992307213")[1]
+DeerGod.Parent = workspace
+local Primary = DeerGod:FindFirstChildWhichIsA("BasePart")
+DeerGod.PrimaryPart = Primary
+DeerGod:SetPrimaryPartCFrame(humrp.CFrame * CFrame.new(0, 0, 50))
+
+-- Xoá âm mặc định
 coroutine.wrap(function()
-
-for i, v in ipairs(game.Workspace:WaitForChild("Deer God"):GetDescendants()) do
-    if v.Name == "RushNew" then
-        v.Breathing:Destroy()
-        v.Footsteps:Destroy()
-    end
-end
-
+	for i, v in ipairs(DeerGod:GetDescendants()) do
+		if v.Name == "RushNew" then
+			pcall(function() v.Breathing:Destroy() end)
+			pcall(function() v.Footsteps:Destroy() end)
+		end
+	end
 end)()
 
-game.Workspace:WaitForChild("Deer God").RushNew.Footsteps.Volume = 2.5
-game.Workspace:WaitForChild("Deer God").RushNew.Footsteps.PlaybackSpeed = 0.75
-
-function GitAud(soundgit,filename)
-    SoundName=tostring(SoundName)
-    local url=soundgit
-    local FileName = filename
-    writefile(FileName..".mp3", game:HttpGet(url))
-    return (getcustomasset or getsynasset)(FileName..".mp3")
+-- Tải âm thanh từ GitHub và phát
+function GitAud(soundgit, filename)
+	writefile(filename..".mp3", game:HttpGet(soundgit))
+	return (getcustomasset or getsynasset)(filename..".mp3")
 end
 
 function CustomGitSound(soundlink, vol, filename)
-    local S = Instance.new("Sound")
-    S.SoundId = GitAud(soundlink, filename)
-    S.Parent = game.Workspace:WaitForChild("Deer God")
-    S.Volume = 2
-    S:Play()
+	local S = Instance.new("Sound")
+	S.SoundId = GitAud(soundlink, filename)
+	S.Volume = vol
+	S.Looped = false
+	S.Parent = DeerGod
+	S:Play()
 end
 
-CustomGitSound("https://github.com/eoyoustme/Monoxide/blob/main/Hostile.mp3?raw=true", 1, "DeerGod")
-wait(5)
-local function Moving(target, dur)
-    local tween_info = TweenInfo.new(dur, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local tween = TweenService:Create(Figure.PrimaryPart, tween_info, {CFrame = target})
-    tween:Play()
-    tween.Completed:Wait()
-end
+CustomGitSound("https://github.com/eoyoustme/Monoxide/blob/main/Hostile.mp3?raw=true", 2, "DeerGod")
 
-task.spawn(function()
-while Move == true do
-wait(0.001)
-Moving(chr.HumanoidRootPart.CFrame, 1.9)
-end
+-- Di chuyển theo người chơi bằng tốc độ cố định
+RunService.Heartbeat:Connect(function(dt)
+	if not Move or not DeerGod or not DeerGod.PrimaryPart or not humrp then return end
+	local pos = DeerGod.PrimaryPart.Position
+	local target = humrp.Position
+	local dir = (target - pos).Unit
+	local moveVec = dir * speed * dt
+	local newCFrame = CFrame.new(pos + moveVec, target)
+	DeerGod:SetPrimaryPartCFrame(newCFrame)
 end)
 
-task.spawn(function()
-while true do
-wait(math.random(10, 15))
-game.Workspace:WaitForChild("Deer God").Rushnew:SetPrimaryPartCFrame(chr.HumanoidRootPart.CFrame * CFrame.new(math.random(20, 45), 0, math.random(25, 40)))
+-- Tạo va chạm gây sát thương
+local RushNew = DeerGod:FindFirstChild("RushNew")
+if RushNew then
+	RushNew.Touched:Connect(function(hit)
+		local h = hit.Parent and hit.Parent:FindFirstChild("Humanoid")
+		if h and hit:IsDescendantOf(chr) then
+			h:TakeDamage(10)
+			local stats = game:GetService("ReplicatedStorage").GameStats
+			if stats:FindFirstChild("Player_"..plr.Name) then
+				stats["Player_"..plr.Name].Total.DeathCause.Value = "Deer God"
+			end
+		end
+	end)
 end
-end)
 
-game.Workspace:WaitForChild("Deer God").RushNew.Touched:Connect(function()
-	chr.Humanoid:TakeDamage(100)
-	game:GetService("ReplicatedStorage").GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "Deer God"
+-- Tự huỷ sau 40–60 giây
+task.delay(math.random(20, 40), function()
+	Move = false
+	wait(0.5)
+	if DeerGod and DeerGod.PrimaryPart then
+		DeerGod:SetPrimaryPartCFrame(DeerGod.PrimaryPart.CFrame * CFrame.new(0, -100, 0))
+	end
+	wait(1)
+	if DeerGod then
+		DeerGod:Destroy()
+	end
 end)
-
-wait(math.random(40, 60))
-Move = false
-Moving(game.Workspace:WaitForChild("Deer God").RushNew.CFrame * CFrame.new(0, -100, 0), 3)
-wait(3)
-game.Workspace:WaitForChild("Deer God"):Destroy()
