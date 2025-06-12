@@ -4,10 +4,10 @@ local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd
 local entity = Spawner.createEntity({
     CustomName = "Cease",
     Model = "rbxassetid://107076734598391",
-    Speed = 70,
+    Speed = 60,
     DelayTime = 3,
     HeightOffset = 1,
-    CanKill = true,
+    CanKill = false,
     NoDieOnCrouching = false,
     NoHiding = false,
     AntiCrucifix = false,
@@ -22,7 +22,7 @@ local entity = Spawner.createEntity({
     },
     FlickerLights = {
         true,
-        4
+        3
     },
     Cycles = {
         Min = 1,
@@ -70,30 +70,32 @@ local entity = Spawner.createEntity({
     }
 })
 
--- Kiểm tra khi entity di chuyển
+-- ✅ Kiểm tra chuyển động để giết nếu di chuyển trong phạm vi
 entity.Debug.OnEntityMoving = function(Invincible, Hiding, plrCollisionPoint)
     local Players = game:GetService("Players")
     local LocalPlayer = Players.LocalPlayer
     local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
     local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+    local Humanoid = Character:FindFirstChildOfClass("Humanoid")
 
-    local magnitude = (entity.Model:GetPivot().Position - HumanoidRootPart.Position).Magnitude
+    if not Humanoid then return end
 
-    print("Invincible: "..tostring(Invincible))
-    print("Player to Entity Collision (None hiding Point): "..tostring(plrCollisionPoint))
-    print("Hiding: "..tostring(Hiding))
-    print("Distance to entity: "..magnitude)
+    local distance = (entity.Model:GetPivot().Position - HumanoidRootPart.Position).Magnitude
+    local isMoving = Humanoid.MoveDirection.Magnitude > 0.1
+    local health = Humanoid.Health
 
-    if magnitude <= 40 and not Hiding then
-        local humanoid = Character:FindFirstChildOfClass("Humanoid")
-        if humanoid and humanoid.MoveDirection.Magnitude > 0.1 then
-            humanoid.Health = 0
-            warn("Bạn đã di chuyển trong phạm vi 40 studs và bị giết bởi Nightmare Rush.")
-        end
+    print("Distance:", distance)
+    print("Hiding:", Hiding)
+    print("Moving:", isMoving)
+    print("Health:", health)
+
+    if distance <= 40 and not Hiding and isMoving and health > 0 then
+        Humanoid.Health = 0
+        warn("Bạn đã di chuyển trong phạm vi 40 studs và bị giết bởi Nightmare Rush.")
     end
 end
 
--- Log các sự kiện khác
+-- Các sự kiện debug khác
 entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned:")
 end
@@ -101,7 +103,7 @@ end
 entity.Debug.OnEntityDespawned = function()
     print("Entity has despawned:")
 
-    -- Achievement
+    -- Hiển thị Achievement
     local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
     achievementGiver({
         Title = "Im The OrigiNal",
@@ -117,14 +119,14 @@ entity.Debug.OnEntityFinishedRebound = function()
 end
 
 entity.Debug.OnEntityEnteredRoom = function(entityTable, room)
-    print("Entity:", "has entered room:", room)
+    print("Entity has entered room:", room)
 end
 
 entity.Debug.OnLookAtEntity = function()
     print("Player has looked at entity:")
 end
 
--- Khi người chơi chết
+-- ✅ Hiển thị DeathHint và cập nhật nguyên nhân chết
 entity.Debug.OnDeath = function()
     warn("Player has died.")
     
@@ -147,7 +149,6 @@ entity.Debug.OnDeath = function()
         end
     end
 
-    -- Gọi DeathHint nội bộ
     DeathHint({
         "You died to who you Call G-95",
         "This Entity its So Faster So try Hide",
@@ -155,7 +156,7 @@ entity.Debug.OnDeath = function()
         "..-so avoid Eye Contact"
     }, "Blue")
 
-    -- ✅ Gửi thông báo và cập nhật nguyên nhân cái chết
+    -- Gửi DeathHint và cập nhật DeathCause
     local Players = game:GetService("Players")
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local LocalPlayer = Players.LocalPlayer
@@ -174,7 +175,7 @@ entity.Debug.OnDeath = function()
             if statsPath and statsPath:FindFirstChild("Player_" .. LocalPlayer.Name) then
                 local deathStat = statsPath["Player_" .. LocalPlayer.Name]:FindFirstChild("Total")
                 if deathStat and deathStat:FindFirstChild("DeathCause") then
-                    deathStat.DeathCause.Value = "Black Hole"
+                    deathStat.DeathCause.Value = "Cease"
                 end
             end
         end
