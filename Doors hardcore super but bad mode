@@ -8,24 +8,13 @@ end)
 
 local entityList = {
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Cease%20but%20bad", delay = 325},
-    {url = "IN CREATOR", delay = 210},
+    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Ripper%20but%20bad", delay = 210},
     {url = "still not have", delay = 600},
     {url = "still not have", delay = 170},
     {url = "https://pastefy.app/1xxpTxo3/raw", delay = 100000},
     {url = "still not have", delay = 190},
     {url = "still not have", delay = 300},
     {url = "still not have", delay = 1500},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Hungry%20doors%20nightmare", delay = 35},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Terror", delay = 490},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Pandemonium", delay = 301},
-    {url = "https://raw.githubusercontent.com/vick-png/Wh1t3-spawn/refs/heads/main/Whatt", delay = 40},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Guestly", delay = 220},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/G-95", delay = 380},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-60%20for%20doors%20spawn", delay = 250},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/DEMON", delay = 666},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Twiter%20remake", delay = 450},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Twiter%202", delay = 480},
-}
 
 for _, entity in ipairs(entityList) do
     coroutine.wrap(function()
