@@ -77,7 +77,8 @@ end)()
 coroutine.wrap(function()
     while true do
         wait(210)
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/namnguyen33/41450088/refs/heads/main/Null"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/namnguyen33/41450088/refs/heads/main/Null"))()
+
 end
 
 end)()
@@ -155,8 +156,12 @@ end)()
 coroutine.wrap(function()
     while true do
         wait(35)
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Hungry%20doors%20nightmare"))()
-    end
+        game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+        wait(0)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Terror"))()
+
+end
+
 end)()
 
 -- TERROR
