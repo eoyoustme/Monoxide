@@ -226,3 +226,15 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/re
 end
 
 end)()
+
+-- DEMON
+coroutine.wrap(function()
+    while true do
+        wait(666)
+        game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+        wait(0)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-60%20for%20doors%20spawn"))()
+
+end
+
+end)()
