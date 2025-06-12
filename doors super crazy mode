@@ -157,7 +157,7 @@ coroutine.wrap(function()
     end
 end)()
 
--- smile
+-- TERROR
 coroutine.wrap(function()
     while true do
         wait(490)
