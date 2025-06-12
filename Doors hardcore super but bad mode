@@ -7,14 +7,13 @@ pcall(function()
 end)
 
 local entityList = {
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Cease%20but%20bad", delay = 60},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Ripper%20but%20bad", delay = 40},
+    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Cease%20but%20bad", delay = 325},
+    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Ripper%20but%20bad", delay = 210},
     {url = "still not have", delay = 600},
     {url = "still not have", delay = 170},
     {url = "https://pastefy.app/1xxpTxo3/raw", delay = 100000},
     {url = "still not have", delay = 190},
-    {url = "still not have", delay = 300},
-    {url = "still not have", delay = 1500},
+    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Silence%20but%20bad", delay = 300},
 }
 
 for _, entity in ipairs(entityList) do
