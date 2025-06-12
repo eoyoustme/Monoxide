@@ -15,6 +15,7 @@ local entityList = {
     {url = "still not have", delay = 190},
     {url = "still not have", delay = 300},
     {url = "still not have", delay = 1500},
+}
 
 for _, entity in ipairs(entityList) do
     coroutine.wrap(function()
