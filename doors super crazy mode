@@ -7,9 +7,11 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/re
 -- Sprint Bar
 loadstring(game:HttpGet("https://pastefy.app/EpqLU3vm/raw"))()
 
+-- Guiding candle
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Guiding%20candle"))()
+
 --Cave ambience
 local sound = Instance.new("Sound")
-
 
 sound.SoundId = "rbxassetid://88456225545062"
 
