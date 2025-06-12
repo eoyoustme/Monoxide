@@ -9,7 +9,7 @@ end)
 local entityList = {
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Cease%20but%20bad", delay = 325},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Ripper%20but%20bad", delay = 210},
-    {url = "", delay = 600},
+    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-60%20(hardcore%20but%20bad)", delay = 600},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Frostguy%20but%20bad%20(real%20script%20by%20guestly)", delay = 170},
     {url = "https://pastefy.app/1xxpTxo3/raw", delay = 100000},
     {url = "still not have", delay = 190},
