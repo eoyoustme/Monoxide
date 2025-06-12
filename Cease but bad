@@ -8,11 +8,11 @@ local entity = Spawner.createEntity({
     Speed = 70, -- Percentage, 100 = default Rush speed
     DelayTime = 3, -- Time before starting cycles (seconds)
     HeightOffset = 1,
-    CanKill = true,
+    CanKill = false,
     NoDieOnCrouching = false,
     NoHiding = false,
     AntiCrucifix = false,
-    KillRange = 40,
+    KillRange = 0,
     OneRoom = false,
     DieOnLook = false,
     BreakLights = true,
@@ -130,33 +130,61 @@ end
 
 entity.Debug.OnDeath = function()
     warn("Player has died.")
+
     local func, setupval, getinfo, typeof, getgc, next = nil, debug.setupvalue or setupvalue, debug.getinfo or getinfo, typeof, getgc, next
 
-for i,v in next, getgc(false) do
-    if typeof(v) == "function" then
-        local info = getinfo(v)
-        if info.currentline == 54 and info.nups == 2 and info.is_vararg == 0 then
-            func = v
-            break
+    for i, v in next, getgc(false) do
+        if typeof(v) == "function" then
+            local info = getinfo(v)
+            if info.currentline == 54 and info.nups == 2 and info.is_vararg == 0 then
+                func = v
+                break
+            end
+        end
+    end
+
+    local function DeathHint(hints, type: string)
+        setupval(func, 1, hints)
+        if type ~= nil then
+            setupval(func, 2, type)
+        end
+    end
+
+    -- Gọi DeathHint nội bộ (optional nếu bạn vẫn dùng)
+    DeathHint({
+        "You died to who you Call G-95",
+        "This Entity its So Faster So try Hide",
+        "Its from to hell He Make YoU Suffer",
+        "..-so avoid Eye Contact"
+    }, "Blue")
+
+    -- ✅ THÊM MỚI: Gửi DeathHint ra client và cập nhật DeathCause
+    local Players = game:GetService("Players")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local LocalPlayer = Players.LocalPlayer
+
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+        if LocalPlayer.Character.Humanoid.Health <= 0 then
+            -- Gửi thông báo gợi ý khi chết
+            firesignal(ReplicatedStorage.RemotesFolder.DeathHint.OnClientEvent, {
+                "You died to who you call Cease but bad...",
+                "if you see light flick don't move,
+                "gyat skibidi"
+            }, "Blue")
+
+            wait(0.01)
+
+            -- Cập nhật nguyên nhân cái chết
+            local statsPath = ReplicatedStorage:FindFirstChild("GameStats")
+            if statsPath and statsPath:FindFirstChild("Player_" .. LocalPlayer.Name) then
+                local deathStat = statsPath["Player_" .. LocalPlayer.Name]:FindFirstChild("Total")
+                if deathStat and deathStat:FindFirstChild("DeathCause") then
+                    deathStat.DeathCause.Value = "Black Hole"
+                end
+            end
         end
     end
 end
-
-local function DeathHint(hints, type: string)
-    setupval(func, 1, hints)
-    if type ~= nil then
-        setupval(func, 2, type)
-    end
-end
-
-DeathHint({
-    "You died to who you Call G-95",
-    "This Entity its So Faster So try Hide",
-    "Its from to hell He Make YoU Suffer",
-    "..-so avoid Eye Contact"
-}, "Blue") -- "Blue" or "Yellow"
-end
-
 ------------------------
 
 -- Run the created entity
