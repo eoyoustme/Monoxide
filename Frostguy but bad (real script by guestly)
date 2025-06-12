@@ -1,0 +1,65 @@
+local entityModel = true
+local latestRoom = game.ReplicatedStorage.GameData.LatestRoom.Value
+
+if game.Workspace:FindFirstChild("SeekMovingNewClone") or 
+   latestRoom == 50 or latestRoom == 100 or  
+   (latestRoom >= 90 and latestRoom <= 100) then
+    entityModel = false
+end
+
+local Kill = true
+local depthsTer = game:GetObjects("rbxassetid://72025652460266")[1] -- Load DepthsTer from the ID
+depthsTer.Parent = game.Workspace
+
+local part = depthsTer:FindFirstChildWhichIsA("BasePart") or depthsTer:FindFirstChildWhichIsA("Part")
+
+part.CFrame = game.Workspace.CurrentRooms:GetChildren()[#game.Workspace.CurrentRooms:GetChildren() - 1].Parts.Floor.CFrame + Vector3.new(0, 6, 0)
+
+local doorOpened = false
+
+-- Detect door opening
+local currentRoom = game.Workspace.CurrentRooms:GetChildren()[#game.Workspace.CurrentRooms:GetChildren()]
+local door = currentRoom:FindFirstChild("Door") or currentRoom:FindFirstChildWhichIsA("Model")
+
+if door and door:FindFirstChild("DoorHitbox") then
+    door.DoorHitbox.Touched:Connect(function(hit)
+        if hit.Parent == game.Players.LocalPlayer.Character then
+            doorOpened = true
+        end
+    end)
+end
+
+task.delay(5, function()
+    if not doorOpened then
+        task.spawn(function()
+            while Kill == true do
+                task.wait(0.6)
+                if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+                    game.Players.LocalPlayer.Character.Humanoid:TakeDamage(6)
+                    if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 then
+                        firesignal(game.ReplicatedStorage.RemotesFolder.DeathHint.OnClientEvent, {
+                            "You died to who you call Frostguy...",
+                            "You must open the next door fast or he will start draining your health!",
+                            "He punishes hesitation."
+                        }, "Blue")
+                        wait(0.01)
+                        game:GetService("ReplicatedStorage").GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "Frostguy"
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+Kill = false
+depthsTer:Destroy()
+
+local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
+
+achievementGiver({
+    Title = "IM SO COLD",
+    Desc = "You had one job... just open the door.",
+    Reason = "Encountered frostguy",
+    Image = "rbxassetid://"
+})
