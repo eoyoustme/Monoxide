@@ -1,5 +1,5 @@
 require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("super crazy mode is now active ",true)
-wait(2) require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Make by HUNGERED or thanhphok channel!",true)
+wait(2) require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Make by HUNGERED , Nhankg , Guestly",true)
 
 -- Sprint Bar
 loadstring(game:HttpGet("https://pastefy.app/EpqLU3vm/raw"))()
