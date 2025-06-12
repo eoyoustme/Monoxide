@@ -3,7 +3,7 @@ local chr = plr.Character or plr.CharacterAdded:Wait()
 local humrp = chr:WaitForChild("HumanoidRootPart")
 local RunService = game:GetService("RunService")
 
-local speed = 50
+local speed = 20
 local Move = true
 
 -- Tải Deer God model
