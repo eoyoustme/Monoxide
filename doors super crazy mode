@@ -240,3 +240,27 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/re
 end
 
 end)()
+
+-- Twiter v1
+coroutine.wrap(function()
+    while true do
+        wait(450)
+        game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+        wait(0)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/DEMON"))()
+
+end
+
+end)()
+
+-- Twiter v2
+coroutine.wrap(function()
+    while true do
+        wait(480)
+        game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+        wait(0)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/DEMON"))()
+
+end
+
+end)()
