@@ -66,6 +66,18 @@ local TweenService = game:GetService("TweenService")
 local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
 TW:Play()
 
+local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+local camara = game.Workspace.CurrentCamera
+local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
+	camara.CFrame = camara.CFrame * shakeCf
+end)
+camShake:Start()
+camShake:ShakeOnce(70,6,1.1,9,2,1)
+local speed = math.random(250,300)
+local delay = {"2", "2.5", "1.5", "1", "2.1"}
+local fuck = delay[math.random(1, #delay)]
+wait(0.4)
+
 local cue2 = Instance.new("Sound")
     cue2.Parent = game.Workspace
     cue2.Name = "Spawn"
@@ -74,18 +86,6 @@ local cue2 = Instance.new("Sound")
     cue2.PlaybackSpeed = 0.5
     cue2:Play()
 end
-
-local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
-local camara = game.Workspace.CurrentCamera
-local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
-	camara.CFrame = camara.CFrame * shakeCf
-end)
-camShake:Start()
-camShake:ShakeOnce(10,3,0.1,6,2,0.5)
-local speed = math.random(125,150)
-local delay = {"2", "2.5", "1.5", "1", "2.1"}
-local fuck = delay[math.random(1, #delay)]
-wait(2)
 
 wait(3)
 game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
