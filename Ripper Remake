@@ -79,14 +79,75 @@ end
 
 entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned:")
-local cue2 = Instance.new("Sound")
-    cue2.Parent = game.Workspace
-    cue2.Name = "Spawn"
-    cue2.SoundId = "rbxassetid://9125713501"
-    cue2.Volume = 4.5
-    cue2.PlaybackSpeed = 0.525
-    cue2:Play()
+entity.Debug.OnEntitySpawned = function()
+    print("Entity has spawned")
+
+    task.wait(1) -- Đợi entity ổn định
+
+    local Players = game:GetService("Players")
+    local RunService = game:GetService("RunService")
+    local LocalPlayer = Players.LocalPlayer
+    local Camera = workspace.CurrentCamera
+
+    local isTargeting = false
+    local startTime = 0
+    local cameraLocked = false
+    local killCountdown = 4
+
+    RunService.Heartbeat:Connect(function()
+        if not entity.Model or not entity.Model:FindFirstChild("PrimaryPart") then return end
+
+        local char = LocalPlayer.Character
+        if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+
+        local hrp = char.HumanoidRootPart
+        local dist = (entity.Model.PrimaryPart.Position - hrp.Position).Magnitude
+
+        if dist <= entity.Config.KillRange then
+            if not isTargeting then
+                isTargeting = true
+                startTime = tick()
+                print(">>> Player entered kill zone!")
+
+                -- Move entity 4 studs in front of player
+                local forward = hrp.CFrame.LookVector
+                local newPos = hrp.Position - forward * 4
+                entity.Model:SetPrimaryPartCFrame(CFrame.new(newPos))
+
+                -- Lock camera to entity
+                Camera.CameraType = Enum.CameraType.Scriptable
+                Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, entity.Model.PrimaryPart.Position)
+                cameraLocked = true
+            else
+                if tick() - startTime >= killCountdown then
+                    if dist <= entity.Config.KillRange then
+                        local humanoid = char:FindFirstChildOfClass("Humanoid")
+                        if humanoid and humanoid.Health > 0 then
+                            humanoid.Health = 0
+                            print(">>> Player killed after 4 seconds.")
+                        end
+                    end
+                    isTargeting = false
+                else
+                    if cameraLocked then
+                        Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, entity.Model.PrimaryPart.Position)
+                    end
+                end
+            end
+        else
+            -- Player escaped
+            if isTargeting then
+                print(">>> Player escaped kill zone.")
+            end
+            isTargeting = false
+            if cameraLocked then
+                Camera.CameraType = Enum.CameraType.Custom
+                cameraLocked = false
+            end
+        end
+    end)
 end
+
 
 game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
 game.Lighting.MainColorCorrection.Contrast = 10
@@ -158,69 +219,6 @@ entity.Debug.OnDeath = function()
         "..-so avoid Eye Contact"
     }, "Blue")
 end
-
--- === Logic: Attack + Camera Lock ===
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-
-local isTargeting = false
-local startTime = 0
-local cameraLocked = false
-local killCountdown = 4
-
-RunService.Heartbeat:Connect(function()
-    if not entity.Model or not entity.Model:FindFirstChild("PrimaryPart") then return end
-    local char = LocalPlayer.Character
-    if not char or not char:FindFirstChild("HumanoidRootPart") then return end
-
-    local hrp = char.HumanoidRootPart
-    local dist = (entity.Model.PrimaryPart.Position - hrp.Position).Magnitude
-
-    if dist <= entity.Config.KillRange then
-        if not isTargeting then
-            isTargeting = true
-            startTime = tick()
-            print(">>> Player entered kill zone!")
-
-            -- Move entity in front of player (4 studs)
-            local forward = hrp.CFrame.lookVector
-            local newPos = hrp.Position - forward * 4
-            entity.Model:SetPrimaryPartCFrame(CFrame.new(newPos))
-
-            -- Lock camera to entity
-            Camera.CameraType = Enum.CameraType.Scriptable
-            Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, entity.Model.PrimaryPart.Position)
-            cameraLocked = true
-        else
-            if tick() - startTime >= killCountdown then
-                if dist <= entity.Config.KillRange then
-                    local humanoid = char:FindFirstChildOfClass("Humanoid")
-                    if humanoid and humanoid.Health > 0 then
-                        humanoid.Health = 0
-                        print(">>> Player killed after 4 seconds.")
-                    end
-                end
-                isTargeting = false
-            else
-                -- Keep camera locked
-                if cameraLocked then
-                    Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, entity.Model.PrimaryPart.Position)
-                end
-            end
-        end
-    else
-        if isTargeting then
-            print(">>> Player escaped kill zone.")
-        end
-        isTargeting = false
-        if cameraLocked then
-            Camera.CameraType = Enum.CameraType.Custom
-            cameraLocked = false
-        end
-    end
-end)
 
 -- === Run the entity ===
 Spawner.runEntity(entity)
