@@ -3,7 +3,7 @@ local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd
 -- Create entity
 local entity = Spawner.createEntity({
     CustomName = "regnuh",
-    Model = "rbxassetid://88185584081256",
+    Model = "rbxassetid://116038833048579",
     Speed = 9000,
     DelayTime = 6,
     HeightOffset = 1,
@@ -87,6 +87,7 @@ local TweenService = game:GetService("TweenService")
 local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(86, 86, 86)})
 TW:Play()
 wait(0)
+end
 
 entity.Debug.OnEntityDespawned = function()
     print("Entity has despawned:")
