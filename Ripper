@@ -1,0 +1,202 @@
+local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/DoorEntitySpawn%2BSource'))()
+
+-- Create entity
+local entity = Spawner.createEntity({
+    CustomName = "Ripper",
+    Model = "rbxassetid://88185584081256",
+    Speed = 185,
+    DelayTime = 3,
+    HeightOffset = 1,
+    CanKill = true,
+    NoDieOnCrouching = false,
+    NoHiding = false,
+    AntiCrucifix = false,
+    KillRange = 100,
+    OneRoom = false,
+    DieOnLook = false,
+    BreakLights = true,
+    BackwardsMovement = false,
+    MovementDeath = {
+        false,
+        '1',
+    },
+    FlickerLights = {
+        false,
+        80
+    },
+    Cycles = {
+        Min = 1,
+        Max = 1,
+        WaitTime = 1,
+    },
+    CamShake = {
+        true,
+        {3.5, 20, 0.1, 1},
+        100,
+    },
+    Jumpscare = {
+        true,
+        {
+            Image1 = "rbxassetid://11394048190",
+            Image2 = "rbxassetid://11394048190",
+            Shake = true,
+            Sound1 = {
+                10483790459,
+                { Volume = 0.5 },
+            },
+            Sound2 = {
+                10483837590,
+                { Volume = 0.5 },
+            },
+            Flashing = {
+                true,
+                Color3.fromRGB(255, 255, 255),
+            },
+            Tease = {
+                false,
+                Min = 1,
+                Max = 1,
+            },
+        },
+    },
+    Color = 'GuidingLight',
+    DiffrentMessages = false,
+    CustomDialog = {
+        {"Claim has seen you.", "It will consume anyone on sight.", "It takes a bit to fully spawn in", "so you can use that to your advantage."},
+        {"Stop Dieing"},
+        {"Bruh", "Use what you have learned from Rush!"},
+        {"It seems like Template is causing quite the ruckus...", "Hide in a closet or bed as quickly as possible!"},
+        {"I have told You What to do", "YOU JUST HAVE A SKILL ISSUE"}
+    }
+})
+
+-- Debug events
+entity.Debug.OnEntityMoving = function(Invincible, Hiding, plrCollisionPoint)
+    print("Invincible: "..tostring(Invincible))
+    print("Player to Entity Collision: "..tostring(plrCollisionPoint))
+    print("Hiding: "..tostring(Hiding))
+end
+
+entity.Debug.OnEntitySpawned = function()
+    print("Entity has spawned:")
+end
+
+entity.Debug.OnEntityDespawned = function()
+    print("Entity has despawned:")
+
+    local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
+    achievementGiver({
+        Title = "Torn apart",
+        Desc = "Don't leave early",
+        Reason = "Survive the Entity Ripper",
+        Image = "rbxassetid://3100736018"
+    })
+end
+
+entity.Debug.OnEntityFinishedRebound = function()
+    print("Entity has finished rebound:")
+end
+
+entity.Debug.OnEntityEnteredRoom = function(entityTable, room)
+    print("Entity:", "has entered room:", room)
+end
+
+entity.Debug.OnLookAtEntity = function()
+    print("Player has looked at entity:")
+end
+
+entity.Debug.OnDeath = function()
+    warn("Player has died.")
+    workspace.CurrentCamera.CameraType = Enum.CameraType.Custom -- Reset camera on death
+
+    local func, setupval, getinfo, typeof, getgc, next = nil, debug.setupvalue or setupvalue, debug.getinfo or getinfo, typeof, getgc, next
+    for i, v in next, getgc(false) do
+        if typeof(v) == "function" then
+            local info = getinfo(v)
+            if info.currentline == 54 and info.nups == 2 and info.is_vararg == 0 then
+                func = v
+                break
+            end
+        end
+    end
+
+    local function DeathHint(hints, type)
+        setupval(func, 1, hints)
+        if type ~= nil then
+            setupval(func, 2, type)
+        end
+    end
+
+    DeathHint({
+        "You died to who you Call G-95",
+        "This Entity its So Faster So try Hide",
+        "Its from to hell He Make YoU Suffer",
+        "..-so avoid Eye Contact"
+    }, "Blue")
+end
+
+-- === Logic: Attack + Camera Lock ===
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+local isTargeting = false
+local startTime = 0
+local cameraLocked = false
+local killCountdown = 4
+
+RunService.Heartbeat:Connect(function()
+    if not entity.Model or not entity.Model:FindFirstChild("PrimaryPart") then return end
+    local char = LocalPlayer.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+
+    local hrp = char.HumanoidRootPart
+    local dist = (entity.Model.PrimaryPart.Position - hrp.Position).Magnitude
+
+    if dist <= entity.Config.KillRange then
+        if not isTargeting then
+            isTargeting = true
+            startTime = tick()
+            print(">>> Player entered kill zone!")
+
+            -- Move entity in front of player (4 studs)
+            local forward = hrp.CFrame.lookVector
+            local newPos = hrp.Position - forward * 4
+            entity.Model:SetPrimaryPartCFrame(CFrame.new(newPos))
+
+            -- Lock camera to entity
+            Camera.CameraType = Enum.CameraType.Scriptable
+            Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, entity.Model.PrimaryPart.Position)
+            cameraLocked = true
+        else
+            if tick() - startTime >= killCountdown then
+                if dist <= entity.Config.KillRange then
+                    local humanoid = char:FindFirstChildOfClass("Humanoid")
+                    if humanoid and humanoid.Health > 0 then
+                        humanoid.Health = 0
+                        print(">>> Player killed after 4 seconds.")
+                    end
+                end
+                isTargeting = false
+            else
+                -- Keep camera locked
+                if cameraLocked then
+                    Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, entity.Model.PrimaryPart.Position)
+                end
+            end
+        end
+    else
+        if isTargeting then
+            print(">>> Player escaped kill zone.")
+        end
+        isTargeting = false
+        if cameraLocked then
+            Camera.CameraType = Enum.CameraType.Custom
+            cameraLocked = false
+        end
+    end
+end)
+
+-- === Run the entity ===
+Spawner.runEntity(entity)
