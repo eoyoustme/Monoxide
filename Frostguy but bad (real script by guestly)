@@ -1,6 +1,7 @@
 local entityModel = true
 local latestRoom = game.ReplicatedStorage.GameData.LatestRoom.Value
 
+-- Kiểm tra điều kiện không spawn entity
 if game.Workspace:FindFirstChild("SeekMovingNewClone") or 
    latestRoom == 50 or latestRoom == 100 or  
    (latestRoom >= 90 and latestRoom <= 100) then
@@ -8,16 +9,33 @@ if game.Workspace:FindFirstChild("SeekMovingNewClone") or
 end
 
 local Kill = true
+local doorOpened = false
+
+-- Tải entity Frostguy (depthsTer)
 local depthsTer = game:GetObjects("rbxassetid://72025652460266")[1]
 depthsTer.Parent = game.Workspace
 
+-- Đảm bảo tất cả part không bị rơi (giữ đứng yên)
+for _, obj in pairs(depthsTer:GetDescendants()) do
+    if obj:IsA("BasePart") then
+        obj.Anchored = true
+    end
+end
+
+-- Lấy part chính để đặt vị trí
 local part = depthsTer:FindFirstChildWhichIsA("BasePart") or depthsTer:FindFirstChildWhichIsA("Part")
-part.CFrame = game.Workspace.CurrentRooms:GetChildren()[#game.Workspace.CurrentRooms:GetChildren() - 1].Parts.Floor.CFrame + Vector3.new(0, 6, 0)
 
-local doorOpened = false
+-- Đặt entity ở trên phòng trước đó
+local roomList = game.Workspace.CurrentRooms:GetChildren()
+local prevRoom = roomList[#roomList - 1]
+local floor = prevRoom:FindFirstChild("Parts") and prevRoom.Parts:FindFirstChild("Floor")
 
--- Detect door opening
-local currentRoom = game.Workspace.CurrentRooms:GetChildren()[#game.Workspace.CurrentRooms:GetChildren()]
+if floor and part then
+    part.CFrame = floor.CFrame + Vector3.new(0, 6, 0)
+end
+
+-- Theo dõi cửa mở
+local currentRoom = roomList[#roomList]
 local door = currentRoom:FindFirstChild("Door") or currentRoom:FindFirstChildWhichIsA("Model")
 
 if door and door:FindFirstChild("DoorHitbox") then
@@ -27,7 +45,7 @@ if door and door:FindFirstChild("DoorHitbox") then
             Kill = false
             depthsTer:Destroy()
 
-            -- Achievement trigger
+            -- Gửi thành tích
             local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
             achievementGiver({
                 Title = "IM SO COLD",
@@ -39,22 +57,25 @@ if door and door:FindFirstChild("DoorHitbox") then
     end)
 end
 
--- Delay damage check
+-- Bắt đầu đếm 5 giây trước khi bắt đầu gây sát thương
 task.delay(5, function()
     if not doorOpened then
         task.spawn(function()
             while Kill == true do
                 task.wait(0.6)
-                if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
-                    game.Players.LocalPlayer.Character.Humanoid:TakeDamage(6)
-                    if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 then
+                local char = game.Players.LocalPlayer.Character
+                local hum = char and char:FindFirstChild("Humanoid")
+                if hum then
+                    hum:TakeDamage(6)
+                    if hum.Health <= 0 then
+                        -- Thông báo chết
                         firesignal(game.ReplicatedStorage.RemotesFolder.DeathHint.OnClientEvent, {
                             "You died to who you call Frostguy...",
                             "You must open the next door fast or he will start draining your health!",
                             "He punishes hesitation."
                         }, "Blue")
                         wait(0.01)
-                        game:GetService("ReplicatedStorage").GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "Frostguy"
+                        game:GetService("ReplicatedStorage").GameStats["Player_" .. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "Frostguy"
                     end
                 end
             end
