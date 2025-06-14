@@ -51,7 +51,7 @@ local entity = spawner.Create({
 	},
 	Death = {
 		Type = "Guiding",
-		Hints = {"Death", "Hints", "Go", "Here"},
+		Hints =  {"You die to who call A-120'", "He is version of A-120 but Harder", "Hide if you hear he sound", "And never leave early"},
 		Cause = ""
 	}
 })
