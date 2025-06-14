@@ -1,0 +1,104 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
+
+local entity = spawner.Create({
+	Entity = {
+		Name = "A-100",
+		Asset = "rbxassetid://125054732628428",
+		HeightOffset = 0
+	},
+	Lights = {
+		Flicker = {
+			Enabled = true,
+			Duration = 1
+		},
+		Shatter = true,
+		Repair = false
+	},
+	Earthquake = {
+		Enabled = true
+	},
+	CameraShake = {
+		Enabled = true,
+		Range = 100,
+		Values = {1.5, 20, 0.1, 1}
+	},
+	Movement = {
+		Speed = 60,
+		Delay = 1,
+		Reversed = false
+	},
+	Rebounding = {
+		Enabled = false,
+	},
+	Damage = {
+		Enabled = false, -- Gây sát thương bằng đoạn dưới
+	},
+	Crucifixion = {
+		Enabled = true,
+		Range = 40,
+		Resist = false,
+		Break = true
+	},
+	Death = {
+		Type = "Guiding",
+		Hints = {"Death", "Hints", "Go", "Here"},
+		Cause = ""
+	}
+})
+
+-- ===== Spawn entity ở phòng trước mặt người chơi =====
+entity:SetCallback("OnSpawned", function()
+	local player = Players.LocalPlayer
+	local currentRoom = workspace.CurrentRooms:FindFirstChild(tostring(player:GetAttribute("CurrentRoom")))
+
+	if currentRoom then
+		local nextRoom = workspace.CurrentRooms:FindFirstChild(tostring(player:GetAttribute("CurrentRoom") + 1))
+		if nextRoom then
+			entity.Model:SetPrimaryPartCFrame(nextRoom.RoomStart.CFrame + Vector3.new(0, 0, -5))
+			print("Entity spawned in front of player at room: " .. nextRoom.Name)
+		end
+	end
+end)
+
+-- ===== Logic di chuyển ngẫu nhiên hoặc đuổi theo người chơi =====
+local chasing = false
+local damageInterval = 1
+local timeSinceLastDamage = 0
+
+RunService.Heartbeat:Connect(function(dt)
+	if not entity.Model or not entity.Model.PrimaryPart then return end
+
+	local player = Players.LocalPlayer
+	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	local humanoid = player.Character and player.Character:FindFirstChild("Humanoid")
+
+	if hrp and humanoid then
+		local speed = hrp.Velocity.Magnitude
+
+		-- Nếu tốc độ vượt quá 15 -> bắt đầu đuổi
+		if speed > 15 then
+			chasing = true
+			local direction = (hrp.Position - entity.Model.PrimaryPart.Position).Unit
+			entity.Model:SetPrimaryPartCFrame(entity.Model.PrimaryPart.CFrame + direction * entity.Config.Movement.Speed * dt)
+		else
+			chasing = false
+			-- Di chuyển ngẫu nhiên
+			entity.Model:SetPrimaryPartCFrame(entity.Model.PrimaryPart.CFrame * CFrame.new(math.random(-1, 1), 0, math.random(-1, 1)))
+		end
+
+		-- Gây sát thương nếu đang đuổi và gần người chơi
+		if chasing and (entity.Model.PrimaryPart.Position - hrp.Position).Magnitude < 10 then
+			timeSinceLastDamage += dt
+			if timeSinceLastDamage >= damageInterval then
+				humanoid.Health = math.max(0, humanoid.Health - 20)
+				timeSinceLastDamage = 0
+				print("Entity damaged player during chase")
+			end
+		end
+	end
+end)
+
+entity:Run()
