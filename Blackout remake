@@ -1,0 +1,72 @@
+-- Tạo hiệu ứng âm thanh mở đầu
+local static = Instance.new("Sound")
+static.SoundId = "rbxassetid://9120425687"
+static.Parent = game.ReplicatedStorage
+static.Name = "Se"
+static.Pitch = 0.6
+static.Volume = 1.5
+static.TimePosition = 0.2
+static:Play()
+
+-- Tạo GUI cảnh báo
+local GUI = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
+GUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+GUI.IgnoreGuiInset = true
+
+local Image = Instance.new("ImageLabel", GUI)
+Image.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Image.BackgroundTransparency = 1
+Image.Size = UDim2.new(1,0,1,0)
+Image.Image = "rbxassetid://13362464118"
+Image.ImageTransparency = 0
+
+-- Thời gian đứng yên yêu cầu
+local standStillTime = 7
+local moveDetected = false
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local humanoid = char:WaitForChild("Humanoid")
+
+-- Kiểm tra chuyển động liên tục trong thời gian yêu cầu
+for i = 1, standStillTime * 10 do
+    wait(0.1)
+    if humanoid.MoveDirection.Magnitude > 0 then
+        moveDetected = true
+        break
+    end
+end
+
+-- Xử lý nếu người chơi di chuyển
+if moveDetected then
+    -- GUI Jumpscare
+    local jumpscareGUI = Instance.new("ScreenGui", player.PlayerGui)
+    jumpscareGUI.IgnoreGuiInset = true
+    jumpscareGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+    local face = Instance.new("ImageLabel", jumpscareGUI)
+    face.BackgroundTransparency = 1
+    face.Size = UDim2.new(1, 0, 1, 0)
+    face.Image = "rbxassetid://JUMPSCARE_IMAGE_ID" -- Thay ID bằng hình khuôn mặt jumpscare
+    face.ImageTransparency = 0
+
+    -- Âm thanh jumpscare
+    local jumpSound = Instance.new("Sound", player.PlayerGui)
+    jumpSound.SoundId = "rbxassetid://JUMPSCARE_SOUND_ID" -- Thay ID bằng âm thanh jumpscare
+    jumpSound.Volume = 2
+    jumpSound:Play()
+
+    -- Sau 2 giây thì chết
+    wait(2)
+    humanoid:TakeDamage(100)
+
+    -- Death screen
+    game.ReplicatedStorage.GameStats["Player_".. player.Name].Total.DeathCause.Value = "Admiration"
+    firesignal(game.ReplicatedStorage.RemotesFolder.DeathHint.OnClientEvent,
+        {"You died to who you call Admiration.", "Try your best to not move at all.", "He can sense you with sound."},
+        "Blue"
+    )
+else
+    -- Nếu không di chuyển thì xoá GUI sau 1s
+    wait(1)
+    GUI:Destroy()
+end
