@@ -12,7 +12,7 @@ local entityList = {
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-60%20Prime", delay = 110},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-60%20(hardcore%20but%20bad)", delay = 180},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-200", delay = 260},
-    {url = tent.com/eoyoustme/Monoxide/refs/heads/main/Silence%20but%20bad", delay = 300},
+    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-200%20prime", delay = 300},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Silence%20but%20bad", delay = 200},
 }
 
