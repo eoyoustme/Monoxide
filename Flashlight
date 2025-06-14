@@ -1,67 +1,7 @@
-local caption = game.Players.LocalPlayer:WaitForChild("PlayerGui").MainUI.MainFrame.Caption
-caption.TextColor3 = Color3.fromRGB(255, 255, 255)
-require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("F to flashlight",true)
-game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("",true)
+wait(3) require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("CLick to light or F",true)
 
--- Flashlight Script
--- Made by spirit_awoken
- 
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
- 
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
- 
--- Create flashlight
-local flashlight = Instance.new("SpotLight")
-flashlight.Angle = 65
-flashlight.Range = 50
-flashlight.Brightness = 3
-flashlight.Parent = humanoidRootPart
- 
--- Create sound effects
-local onSound = Instance.new("Sound")
-onSound.SoundId = "rbxassetid://9114481260" -- Replace with on sound ID
-onSound.Volume = 1.2 -- Adjust volume as needed
-onSound.MaxDistance = 50 -- Adjust max distance as needed
-onSound.Parent = humanoidRootPart
- 
-local offSound = Instance.new("Sound")
-offSound.SoundId = "rbxassetid://9114481260" -- Replace with off sound ID
-offSound.Volume = 1.2 -- Adjust volume as needed
-offSound.MaxDistance = 50 -- Adjust max distance as needed
-offSound.Parent = humanoidRootPart
- 
-local isOn = false
-local cooldown = false
- 
-local function toggleFlashlight()
-	if cooldown then return end
- 
-	cooldown = true
- 
-	if isOn then
-		-- Turn off
-		offSound:Play()
-		local tweenOff = TweenService:Create(flashlight, TweenInfo.new(0.2), {Brightness = 0})
-		tweenOff:Play()
-		isOn = false
-	else
-		-- Turn on
-		onSound:Play()
-		local tweenOn = TweenService:Create(flashlight, TweenInfo.new(0.2), {Brightness = 2})
-		tweenOn:Play()
-		isOn = true
-	end
- 
-	wait(1) -- 1 second cooldown
-	cooldown = false
-end
- 
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-	if not gameProcessed and input.KeyCode == Enum.KeyCode.F then
-		toggleFlashlight()
-	end
-end)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Functions.lua"))()
+    local tool = LoadCustomInstance("rbxassetid://119101382742656")
+    tool.Parent = game:GetService("Players").LocalPlayer.Backpack
+    tool.Animations.idle.AnimationId = "rbxassetid://507768375"
