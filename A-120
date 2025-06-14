@@ -103,6 +103,101 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		print("Entity has killed the player")
 	else
 		print("Entity has damaged the player")
+local function GetGitSound(GithubSnd, SoundName)
+                local url = GithubSnd
+                if not isfile(SoundName .. ".mp3") then
+                    writefile(SoundName .. ".mp3", game:HttpGet(url))
+                end
+                local sound = Instance.new("Sound")
+                sound.SoundId = (getcustomasset or getsynasset)(SoundName .. ".mp3")
+                return sound
+end
+local Jumpscare = GetGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3","A60")
+Jumpscare.Parent = workspace
+Jumpscare.Volume = 3
+Jumpscare.PlaybackSpeed = 0.9
+Jumpscare:Play()
+
+local JumpscareGui = game:GetService("RunService").RenderStepped:Connect(function()
+
+-- Get the player and their HumanoidRootPart
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+-- Ensure this script runs as a LocalScript
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local Background = Instance.new("Frame")
+
+-- Create the ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "RandomImageGui"
+screenGui.Parent = playerGui
+
+screenGui.IgnoreGuiInset = true
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    
+Background.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+Background.BorderSizePixel = 0
+Background.Size = UDim2.new(1, 0, 1, 0)
+Background.ZIndex = 999
+Background.BackgroundTransparency = 1
+Background.Parent = screenGui
+	
+local TweenService = game:GetService("TweenService")
+
+local imageIds = {
+    "16249498432",
+    "16249498432",
+    "16249498432",
+}
+
+-- Function to pick a random Image ID
+local function getRandomImageId()
+    return imageIds[math.random(1, #imageIds)]
+end
+
+-- Create the ImageLabel for displaying the image
+local imageLabel = Instance.new("ImageLabel")
+imageLabel.Size = UDim2.new(0, 0, 0, 0)
+imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)-- Adjust size (30% of screen width and height)
+imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+imageLabel.BackgroundColor3 = Color3.new(1, 0, 0)
+imageLabel.BackgroundTransparency = 1 -- Make the background fully transparent
+imageLabel.Image = "rbxassetid://" .. getRandomImageId() -- Set the image using a random Image ID
+imageLabel.ImageTransparency = 1
+imageLabel.ImageColor3 = Color3.fromRGB(1, 1, 1)
+imageLabel.Parent = screenGui
+
+-- Animation script
+-- Define tween info
+local GetTimeSpeed = TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+
+-- Create the animation
+local Anim = game.TweenService:Create(imageLabel, GetTimeSpeed, {Size = UDim2.new(0, 580, 0, 580), ImageTransparency = 0})
+local rot = game.TweenService:Create(imageLabel, GetTimeSpeed, {Rotation = math.random(10,18)})
+local tran = game.TweenService:Create(imageLabel, GetTimeSpeed, {ImageTransparency = 0})
+
+-- Play the animation
+Anim:Play()
+tran:Play()
+wait(0.2)
+rot:Play()
+
+wait(0.8)
+game.TweenService:Create(Background, TweenInfo.new(2), {BackgroundTransparency = 1}):Play()
+TweenService:Create(imageLabel, TweenInfo.new(1.5), {ImageTransparency = 1}):Play()
+task.wait(3)
+screenGui:Destroy()
+game.Players.LocalPlayer.Character.Humanoid.Health -= 10
+game.ReplicatedStorage.GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "Multi Monster"
+
+end)
+wait(2)
+Jumpscare:Destroy()
+JumpscareGui:Disconnect()
+
 	end
 end)
 
