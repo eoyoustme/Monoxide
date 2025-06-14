@@ -82,7 +82,7 @@ if moveDetected then
 
 	-- Hiện hint cái chết
 	firesignal(game.ReplicatedStorage.RemotesFolder.DeathHint.OnClientEvent,
-		{"You died to who you call Admiration.", "Try your best to not move at all.", "He can sense you with sound."},
+		{"You died to who you call Blackout.", "Try your best to not move at all.", "He can sense you with sound."},
 		"Blue"
 	)
 
