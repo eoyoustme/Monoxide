@@ -1,0 +1,108 @@
+-- Load spawner
+local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
+
+-- Create entity
+local entity = spawner.Create({
+	Entity = {
+		Name = "Fog",
+		Asset = "rbxassetid://138334986859920",
+		HeightOffset = 0
+	},
+	Lights = {
+		Flicker = {
+			Enabled = true,
+			Duration = 1
+		},
+		Shatter = true,
+		Repair = false
+	},
+	Earthquake = {
+		Enabled = true
+	},
+	CameraShake = {
+		Enabled = true,
+		Range = 100,
+		Values = {1.5, 20, 0.1, 1}
+	},
+	Movement = {
+		Speed = 60,
+		Delay = 2,
+		Reversed = true
+	},
+	Rebounding = {
+		Enabled = true,
+		Type = "Ambush",
+		Min = 100,
+		Max = 100,
+		Delay = 2
+	},
+	Damage = {
+		Enabled = true,
+		Range = 10,
+		Amount = 125
+	},
+	Crucifixion = {
+		Enabled = true,
+		Range = 40,
+		Resist = false,
+		Break = true
+	},
+	Death = {
+		Type = "Curious",
+		Hints = {"You die to who call Fog", "I can't share you how to survive he", "Guiding light say don't share how to survive", "GYAT SKIBIDI"},
+		Cause = ""
+	}
+})
+
+-- Callback debug (tùy chọn)
+entity:SetCallback("OnSpawned", function()
+	print("Entity has spawned")
+end)
+
+entity:SetCallback("OnDespawned", function()
+	print("Entity has despawned")
+end)
+
+-- ===== Kiểm soát theo cửa/phòng ===== --
+
+-- Lấy currentRooms để theo dõi phòng
+local rooms = game:GetService("Workspace"):WaitForChild("CurrentRooms")
+local player = game.Players.LocalPlayer
+local runService = game:GetService("RunService")
+
+-- Theo dõi khi vào phòng 50
+local connected = false
+
+local function checkRoom()
+	for _, room in pairs(rooms:GetChildren()) do
+		if room:FindFirstChild("RoomStart") then
+			local roomNum = tonumber(room.Name)
+			if roomNum == 50 and not connected then
+				connected = true
+
+				-- Khi cửa 50 được mở, chạy entity
+				task.wait(1)
+				entity:Run()
+
+				print("Entity bắt đầu từ phòng 50")
+
+				-- Theo dõi khi mở cửa 51 để despawn
+				local nextRoom = rooms:FindFirstChild("51")
+				if nextRoom then
+					local door = nextRoom:FindFirstChild("Door")
+					if door and door:FindFirstChild("ClientOpen") then
+						door.ClientOpen:GetPropertyChangedSignal("Value"):Connect(function()
+							if door.ClientOpen.Value == true then
+								print("Cửa 51 mở — Xoá entity")
+								entity:Despawn()
+							end
+						end)
+					end
+				end
+			end
+		end
+	end
+end
+
+-- Kiểm tra liên tục đến khi phòng 50 tồn tại
+runService.RenderStepped:Connect(checkRoom)
