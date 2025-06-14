@@ -41,6 +41,11 @@ for i = 1, standStillTime * 10 do
 end
 
 if moveDetected then
+	-- 🧹 Xóa GUI cảnh báo
+	if GUI and GUI.Parent then
+		GUI:Destroy()
+	end
+
 	-- GUI jumpscare
 	local jumpscareGUI = Instance.new("ScreenGui")
 	jumpscareGUI.Name = "JumpscareGui"
@@ -51,7 +56,7 @@ if moveDetected then
 	local face = Instance.new("ImageLabel")
 	face.BackgroundTransparency = 1
 	face.Size = UDim2.new(1, 0, 1, 0)
-	face.Image = "rbxassetid://80379287378581" -- ⚠️ Thay bằng ID hình jumpscare của bạn
+	face.Image = "rbxassetid://80379287378581" -- ⚠️ Thay bằng ID hình jumpscare
 	face.ImageTransparency = 0
 	face.Parent = jumpscareGUI
 
@@ -81,7 +86,7 @@ if moveDetected then
 		"Blue"
 	)
 
-	-- Xoá GUI sau khi chết
+	-- Xoá GUI jumpscare sau khi chết
 	humanoid.Died:Connect(function()
 		task.wait(1)
 		if jumpscareGUI and jumpscareGUI.Parent then
@@ -89,7 +94,9 @@ if moveDetected then
 		end
 	end)
 else
-	-- Nếu không di chuyển, xoá cảnh báo
+	-- Nếu không di chuyển, xoá cảnh báo sau 1 giây
 	task.wait(1)
-	GUI:Destroy()
+	if GUI and GUI.Parent then
+		GUI:Destroy()
+	end
 end
