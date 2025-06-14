@@ -1,18 +1,7 @@
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("",true)
+wait(5) require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("",true)
 
--- Load tool
-local tool = LoadCustomInstance("rbxassetid://119101382742656")
-tool.Parent = player.Backpack
-
--- Load animation
-local animation = Instance.new("Animation")
-animation.AnimationId = "rbxassetid://507768375"
-
--- Khi cầm công cụ thì chạy animation
-tool.Equipped:Connect(function()
-    local track = humanoid:LoadAnimation(animation)
-    track:Play()
-end)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Functions.lua"))()
+    local tool = LoadCustomInstance("rbxassetid://119101382742656")
+    tool.Parent = game:GetService("Players").LocalPlayer.Backpack
+    tool.Animations.idle.AnimationId = "rbxassetid://10479585177"
