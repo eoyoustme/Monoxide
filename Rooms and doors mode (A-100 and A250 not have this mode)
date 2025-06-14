@@ -1,6 +1,6 @@
 require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Rooms and Doors Mode Has Active", true)
 wait(2)
-require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("This mode is like Rooms and doors game in roblox this is mode and this mode makke by me DERENUH or thanhphok and thank nhankg for test mode", true)
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("This mode is like Rooms and doors game in roblox this is mode and this mode makke by me HUNGERED or thanhphok and thank nhankg for test mode", true)
 
 pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/talales/Nhakg/refs/heads/main/cam%20lay%20roi%20test%20di"))()
