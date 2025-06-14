@@ -13,7 +13,7 @@ local entityList = {
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-120", delay = 180},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-200", delay = 260},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-200%20prime", delay = 300},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Silence%20but%20bad", delay = 200},
+    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-120%20prime", delay = 200},
 }
 
 for _, entity in ipairs(entityList) do
