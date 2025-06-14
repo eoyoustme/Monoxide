@@ -11,10 +11,11 @@ local entityList = {
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-60%20(rooms%20and%20doors)", delay = 60},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-60%20Prime", delay = 110},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-120", delay = 180},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-200", delay = 260},
-    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-200%20prime", delay = 300},
+    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-200", delay = 300},
+    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-200%20prime", delay = 330},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-120%20prime", delay = 200},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-666", delay = 666},
+    {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/A-666", delay = 230}, 
 }
 
 for _, entity in ipairs(entityList) do
