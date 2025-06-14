@@ -1,0 +1,101 @@
+-- ===== Load Spawner =====
+local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
+
+-- ===== Create Entity =====
+local entity = spawner.Create({
+	Entity = {
+		Name = "Template Entity",
+		Asset = "https://github.com/RegularVynixu/Utilities/raw/main/Doors/Entity%20Spawner/Assets/Entities/Rush.rbxm",
+		HeightOffset = 0
+	},
+	Lights = {
+		Flicker = {
+			Enabled = true,
+			Duration = 1
+		},
+		Shatter = true,
+		Repair = false
+	},
+	Earthquake = {
+		Enabled = true
+	},
+	CameraShake = {
+		Enabled = true,
+		Range = 100,
+		Values = {1.5, 20, 0.1, 1}
+	},
+	Movement = {
+		Speed = 100,
+		Delay = 2,
+		Reversed = false
+	},
+	Rebounding = {
+		Enabled = true,
+		Type = "Ambush",
+		Min = 1,
+		Max = 1,
+		Delay = 2
+	},
+	Damage = {
+		Enabled = true,
+		Range = 10,
+		Amount = 125
+	},
+	Crucifixion = {
+		Enabled = true,
+		Range = 40,
+		Resist = false,
+		Break = true
+	},
+	Death = {
+		Type = "Guiding",
+		Hints = {"Death", "Hints", "Go", "Here"},
+		Cause = ""
+	}
+})
+
+-- ===== Debug Callbacks (Tùy chọn) =====
+entity:SetCallback("OnSpawned", function()
+	print("🌀 Entity đã xuất hiện ở cửa 1")
+end)
+
+entity:SetCallback("OnDespawned", function()
+	print("💨 Entity đã biến mất khi cửa 2 được mở")
+end)
+
+-- ===== Theo Dõi Việc Mở Cửa =====
+local rooms = workspace:WaitForChild("CurrentRooms")
+local runService = game:GetService("RunService")
+
+local door1Triggered = false
+local door2Connected = false
+
+runService.RenderStepped:Connect(function()
+	-- Khi cửa 1 được mở => Spawn entity
+	if not door1Triggered then
+		local room1 = rooms:FindFirstChild("1")
+		if room1 then
+			local door1 = room1:FindFirstChild("Door")
+			if door1 and door1:FindFirstChild("ClientOpen") and door1.ClientOpen.Value == true then
+				door1Triggered = true
+				entity:Run()
+			end
+		end
+	end
+
+	-- Khi cửa 2 được mở => Despawn entity
+	if not door2Connected then
+		local room2 = rooms:FindFirstChild("2")
+		if room2 then
+			local door2 = room2:FindFirstChild("Door")
+			if door2 and door2:FindFirstChild("ClientOpen") then
+				door2Connected = true
+				door2.ClientOpen:GetPropertyChangedSignal("Value"):Connect(function()
+					if door2.ClientOpen.Value == true then
+						entity:Despawn()
+					end
+				end)
+			end
+		end
+	end
+end)
