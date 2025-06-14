@@ -41,6 +41,15 @@ entity.Debug.OnEntitySpawned = function()
 end
 entity.Debug.OnEntityDespawned = function()
     print("Entity has despawned")
+local cue2 = Instance.new("Sound")
+    cue2.Parent = game.Workspace
+    cue2.Name = "Spawn"
+    cue2.SoundId = "rbxassetid://1837829565"
+    cue2.Volume = 9999
+    cue2.PlaybackSpeed = 1
+    cue2:Play()
+end
+
 game.Workspace.Breathing:Destroy()
 game.Workspace.SmilerOst:Destroy()
 
@@ -54,15 +63,6 @@ achievementGiver({
     Reason = "Encounter TmlnaHRtYXJlIHJlYm91bmQ=",
     Image = "rbxassetid://75215721863388"
 })
-
-game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
-game.Lighting.MainColorCorrection.Contrast = 10
-local tween = game:GetService("TweenService")
-tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
-local TweenService = game:GetService("TweenService")
-local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
-TW:Play()
-end
 
 entity.Debug.OnEntityStartMoving = function()
     print("Entity started moving")
