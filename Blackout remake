@@ -1,6 +1,4 @@
--- ⚠️ Chạy trong LocalScript (StarterPlayerScripts hoặc StarterCharacterScripts)
 
--- Âm thanh mở đầu
 local static = Instance.new("Sound")
 static.SoundId = "rbxassetid://18870782376"
 static.Parent = game.ReplicatedStorage
@@ -10,7 +8,6 @@ static.Volume = 1.5
 static.TimePosition = 0.2
 static:Play()
 
--- Tạo GUI cảnh báo
 local player = game.Players.LocalPlayer
 local GUI = Instance.new("ScreenGui")
 GUI.Name = "WarningGui"
@@ -22,7 +19,7 @@ local Image = Instance.new("ImageLabel")
 Image.BackgroundColor3 = Color3.fromRGB(255,255,255)
 Image.BackgroundTransparency = 1
 Image.Size = UDim2.new(1,0,1,0)
-Image.Image = "rbxassetid://15815325811" -- ảnh cảnh báo
+Image.Image = "rbxassetid://15815325811" 
 Image.ImageTransparency = 0
 Image.Parent = GUI
 
@@ -76,7 +73,7 @@ if moveDetected then
 	if stats then
 		local deathCause = stats:FindFirstChild("Player_".. player.Name)
 		if deathCause then
-			deathCause.Total.DeathCause.Value = "Admiration"
+			deathCause.Total.DeathCause.Value = "Blackout"
 		end
 	end
 
