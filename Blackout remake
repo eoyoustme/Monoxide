@@ -1,6 +1,6 @@
 -- Tạo hiệu ứng âm thanh mở đầu
 local static = Instance.new("Sound")
-static.SoundId = "rbxassetid://9120425687"
+static.SoundId = "rbxassetid://18870782376"
 static.Parent = game.ReplicatedStorage
 static.Name = "Se"
 static.Pitch = 0.6
@@ -17,7 +17,7 @@ local Image = Instance.new("ImageLabel", GUI)
 Image.BackgroundColor3 = Color3.fromRGB(255,255,255)
 Image.BackgroundTransparency = 1
 Image.Size = UDim2.new(1,0,1,0)
-Image.Image = "rbxassetid://13362464118"
+Image.Image = "rbxassetid://15815325811"
 Image.ImageTransparency = 0
 
 -- Thời gian đứng yên yêu cầu
@@ -46,12 +46,12 @@ if moveDetected then
     local face = Instance.new("ImageLabel", jumpscareGUI)
     face.BackgroundTransparency = 1
     face.Size = UDim2.new(1, 0, 1, 0)
-    face.Image = "rbxassetid://JUMPSCARE_IMAGE_ID" -- Thay ID bằng hình khuôn mặt jumpscare
+    face.Image = "rbxassetid://88813129311644" -- Thay ID bằng hình khuôn mặt jumpscare
     face.ImageTransparency = 0
 
     -- Âm thanh jumpscare
     local jumpSound = Instance.new("Sound", player.PlayerGui)
-    jumpSound.SoundId = "rbxassetid://JUMPSCARE_SOUND_ID" -- Thay ID bằng âm thanh jumpscare
+    jumpSound.SoundId = "rbxassetid://18564431123" -- Thay ID bằng âm thanh jumpscare
     jumpSound.Volume = 2
     jumpSound:Play()
 
