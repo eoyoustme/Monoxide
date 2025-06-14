@@ -1,4 +1,6 @@
--- Tạo hiệu ứng âm thanh mở đầu
+-- ⚠️ Chạy trong LocalScript (StarterPlayerScripts hoặc StarterCharacterScripts)
+
+-- Âm thanh mở đầu
 local static = Instance.new("Sound")
 static.SoundId = "rbxassetid://18870782376"
 static.Parent = game.ReplicatedStorage
@@ -20,19 +22,18 @@ local Image = Instance.new("ImageLabel")
 Image.BackgroundColor3 = Color3.fromRGB(255,255,255)
 Image.BackgroundTransparency = 1
 Image.Size = UDim2.new(1,0,1,0)
-Image.Image = "rbxassetid://15815325811"
+Image.Image = "rbxassetid://15815325811" -- ảnh cảnh báo
 Image.ImageTransparency = 0
 Image.Parent = GUI
 
--- Thời gian đứng yên yêu cầu
+-- Kiểm tra di chuyển
 local standStillTime = 7
 local moveDetected = false
 local char = player.Character or player.CharacterAdded:Wait()
 local humanoid = char:WaitForChild("Humanoid")
 
--- Kiểm tra chuyển động liên tục trong thời gian yêu cầu
 for i = 1, standStillTime * 10 do
-	wait(0.1)
+	task.wait(0.1)
 	if humanoid.MoveDirection.Magnitude > 0 then
 		moveDetected = true
 		break
@@ -40,7 +41,7 @@ for i = 1, standStillTime * 10 do
 end
 
 if moveDetected then
-	-- GUI Jumpscare
+	-- GUI jumpscare
 	local jumpscareGUI = Instance.new("ScreenGui")
 	jumpscareGUI.Name = "JumpscareGui"
 	jumpscareGUI.IgnoreGuiInset = true
@@ -50,35 +51,45 @@ if moveDetected then
 	local face = Instance.new("ImageLabel")
 	face.BackgroundTransparency = 1
 	face.Size = UDim2.new(1, 0, 1, 0)
-	face.Image = "rbxassetid://15815525891" -- ⚠️ Đảm bảo ID này là hình jumpscare hợp lệ
+	face.Image = "rbxassetid://80379287378581" -- ⚠️ Thay bằng ID hình jumpscare của bạn
 	face.ImageTransparency = 0
 	face.Parent = jumpscareGUI
 
 	-- Âm thanh jumpscare
 	local jumpSound = Instance.new("Sound")
-	jumpSound.SoundId = "rbxassetid://18564431123" -- ⚠️ Đảm bảo ID âm thanh hợp lệ
+	jumpSound.SoundId = "rbxassetid://18564431123" -- ⚠️ Thay bằng ID âm thanh jumpscare
 	jumpSound.Volume = 2
 	jumpSound.Parent = jumpscareGUI
 	jumpSound:Play()
 
-	-- Chờ 2 giây để hiện jumpscare
-	wait(2)
-
-	-- Gây chết người chơi
+	-- Gây sát thương sau 2 giây
+	task.wait(2)
 	humanoid:TakeDamage(100)
 
-	-- Death screen
-	local stats = game.ReplicatedStorage.GameStats:FindFirstChild("Player_".. player.Name)
+	-- Đặt nguyên nhân cái chết
+	local stats = game.ReplicatedStorage:FindFirstChild("GameStats")
 	if stats then
-		stats.Total.DeathCause.Value = "Admiration"
+		local deathCause = stats:FindFirstChild("Player_".. player.Name)
+		if deathCause then
+			deathCause.Total.DeathCause.Value = "Admiration"
+		end
 	end
 
+	-- Hiện hint cái chết
 	firesignal(game.ReplicatedStorage.RemotesFolder.DeathHint.OnClientEvent,
 		{"You died to who you call Admiration.", "Try your best to not move at all.", "He can sense you with sound."},
 		"Blue"
 	)
+
+	-- Xoá GUI sau khi chết
+	humanoid.Died:Connect(function()
+		task.wait(1)
+		if jumpscareGUI and jumpscareGUI.Parent then
+			jumpscareGUI:Destroy()
+		end
+	end)
 else
-	-- Nếu đứng yên thì xóa GUI sau 1 giây
-	wait(1)
+	-- Nếu không di chuyển, xoá cảnh báo
+	task.wait(1)
 	GUI:Destroy()
 end
