@@ -6,7 +6,7 @@ local entity = Spawner.createEntity({
     CustomName = "A-60", -- Custom name of your entity
     Model = "rbxassetid://92086562769572", -- Can be GitHub file or rbxassetid
     Speed = 120, -- Percentage, 100 = default Rush speed
-    DelayTime = 3, -- Time before starting cycles (seconds)
+    DelayTime = 0, -- Time before starting cycles (seconds)
     HeightOffset = 1,
     CanKill = true,
     NoDieOnCrouching = false,
@@ -51,7 +51,7 @@ local entity = Spawner.createEntity({
             },
             Flashing = {
                 true, -- Enabled/Disabled
-                Color3.fromRGB(255, 255, 255), -- Color
+                Color3.fromRGB(255, 0, 0), -- Color
             },
             Tease = {
                 false, -- Enabled/Disabled
