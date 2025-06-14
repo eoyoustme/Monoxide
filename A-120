@@ -178,7 +178,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 
 	local stats = game.ReplicatedStorage:FindFirstChild("GameStats")
 	if stats and stats:FindFirstChild("Player_" .. player.Name) then
-		stats["Player_" .. player.Name].Total.DeathCause.Value = "Multi Monster"
+		stats["Player_" .. player.Name].Total.DeathCause.Value = "A-120"
 	end
 end)
 
