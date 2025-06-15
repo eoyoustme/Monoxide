@@ -40,7 +40,7 @@ local entity = spawner.Create({
 	},
 	Damage = {
 		Enabled = true,
-		Range = 5,
+		Range = 20,
 		Amount = 125
 	},
 	Crucifixion = {
@@ -65,7 +65,7 @@ entity:SetCallback("OnSpawned", function()
 	local lighting = game:GetService("Lighting")
 	local atmosphere = Instance.new("Atmosphere")
 	atmosphere.Name = "A200Fog"
-	atmosphere.Density = 0.85
+	atmosphere.Density = 1
 	atmosphere.Offset = 0.2
 	atmosphere.Color = Color3.fromRGB(200, 0, 0)
 	atmosphere.Decay = Color3.fromRGB(100, 0, 0)
