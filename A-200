@@ -1,8 +1,8 @@
----====== Load spawner ======---
+--====== Load spawner ======--
 
 local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
 
----====== Create entity ======---
+--====== Create entity ======--
 
 local entity = spawner.Create({
 	Entity = {
@@ -29,7 +29,7 @@ local entity = spawner.Create({
 	Movement = {
 		Speed = 60,
 		Delay = 2,
-		Reversed = false
+		Reversed = true
 	},
 	Rebounding = {
 		Enabled = true,
@@ -51,12 +51,12 @@ local entity = spawner.Create({
 	},
 	Death = {
 		Type = "Guiding",
-		Hints = {"You die to A-200", "He like A-120 But easy", "If you hear him sound", "HIDE Remember this"},
+		Hints = {"You die to A-200", "He like A-120 but easier", "If you hear his sound", "HIDE! Remember this"},
 		Cause = ""
 	}
 })
 
----====== Logic chasing player khi không núp ======---
+--====== Di chuyển đuổi theo người chơi khi không núp ======--
 
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -65,36 +65,39 @@ local chaseConnection
 entity:SetCallback("OnSpawned", function()
 	print("Entity has spawned")
 
-	-- Tạo sương mù dày đặc màu đỏ
-	local lighting = game:GetService("Lighting")
+	-- Tạo sương mù
 	local atmosphere = Instance.new("Atmosphere")
 	atmosphere.Name = "A200Fog"
 	atmosphere.Density = 1
 	atmosphere.Offset = 0.2
-	atmosphere.Color = Color3.fromRGB(200, 0, 0)
-	atmosphere.Decay = Color3.fromRGB(100, 0, 0)
-	atmosphere.Parent = lighting
+	atmosphere.Color = Color3.fromRGB(255, 255, 255)
+	atmosphere.Decay = Color3.fromRGB(255, 255, 255)
+	atmosphere.Parent = game:GetService("Lighting")
 end)
 
 entity:SetCallback("OnStartMoving", function()
 	print("Entity has started moving")
 
-	chaseConnection = RunService.Heartbeat:Connect(function(deltaTime)
+	chaseConnection = RunService.Heartbeat:Connect(function(dt)
 		local player = Players.LocalPlayer
 		if not player then return end
 
-		local character = player.Character
-		if character and character:FindFirstChild("HumanoidRootPart") then
-			local isHiding = character:FindFirstChild("Hiding") or player:GetAttribute("Hidden") == true
+		local char = player.Character
+		if char and char:FindFirstChild("HumanoidRootPart") then
+			local isHiding = char:FindFirstChild("Hiding") or player:GetAttribute("Hidden") == true
 
 			if not isHiding then
-				-- Player không núp, di chuyển entity đến gần player giữ tốc độ
-				local targetPos = character.HumanoidRootPart.Position
 				local model = entity.Model
 				if model and model.PrimaryPart then
-					local direction = (targetPos - model.PrimaryPart.Position).Unit
-					local newPos = model.PrimaryPart.Position + direction * entity.Config.Movement.Speed * deltaTime
-					model:SetPrimaryPartCFrame(CFrame.new(newPos, targetPos))
+					local targetPos = char.HumanoidRootPart.Position
+					local currentPos = model.PrimaryPart.Position
+					local direction = (targetPos - currentPos)
+
+					if direction.Magnitude > 1 then
+						direction = direction.Unit
+						local move = direction * entity.Config.Movement.Speed * dt
+						model:SetPrimaryPartCFrame(CFrame.new(currentPos + move, targetPos))
+					end
 				end
 			end
 		end
@@ -104,12 +107,8 @@ end)
 entity:SetCallback("OnDespawned", function()
 	print("Entity has despawned")
 
-	-- Xóa sương mù khi entity biến mất
-	local lighting = game:GetService("Lighting")
-	local fog = lighting:FindFirstChild("A200Fog")
-	if fog then
-		fog:Destroy()
-	end
+	local fog = game:GetService("Lighting"):FindFirstChild("A200Fog")
+	if fog then fog:Destroy() end
 
 	if chaseConnection then
 		chaseConnection:Disconnect()
@@ -117,7 +116,7 @@ entity:SetCallback("OnDespawned", function()
 	end
 end)
 
----====== Callback OnDamagePlayer với jumpscare mạnh hơn khi giết ======---
+--====== Jumpscare khi giết người chơi ======--
 
 entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
@@ -127,46 +126,40 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		local character = player.Character or player.CharacterAdded:Wait()
 		local playerGui = player:WaitForChild("PlayerGui")
 
-		-- Tạo GUI jumpscare
 		local screenGui = Instance.new("ScreenGui")
 		screenGui.Name = "DeathJumpscareGui"
 		screenGui.IgnoreGuiInset = true
 		screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 		screenGui.Parent = playerGui
 
-		-- Background đỏ phủ full màn hình, không trong suốt luôn
-		local Background = Instance.new("Frame")
-		Background.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-		Background.BorderSizePixel = 0
-		Background.Size = UDim2.new(1, 0, 1, 0)
-		Background.ZIndex = 999
-		Background.BackgroundTransparency = 0
-		Background.Parent = screenGui
+		local background = Instance.new("Frame")
+		background.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+		background.BorderSizePixel = 0
+		background.Size = UDim2.new(1, 0, 1, 0)
+		background.ZIndex = 999
+		background.BackgroundTransparency = 1
+		background.Parent = screenGui
 
-		-- Image jumpscare to rõ ở giữa màn hình
 		local imageLabel = Instance.new("ImageLabel")
 		imageLabel.Size = UDim2.new(0, 700, 0, 700)
 		imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
 		imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
 		imageLabel.BackgroundTransparency = 1
-		imageLabel.Image = "rbxassetid://16249498432" -- Thay ID hình thực tế
+		imageLabel.Image = "rbxassetid://16249498432"
 		imageLabel.ImageTransparency = 0
+		imageLabel.ZIndex = 1000
 		imageLabel.Parent = screenGui
 
-		-- Âm thanh jumpscare lớn và rõ
 		local sound = Instance.new("Sound")
-		sound.Parent = game.Workspace
-		sound.SoundId = "rbxassetid://85271883712040" -- Thay ID âm thanh thực tế
+		sound.SoundId = "rbxassetid://85271883712040"
 		sound.Volume = 6
-		sound.PlaybackSpeed = 1
+		sound.PlaybackSpeed = 2 -- âm thanh nhanh hơn
+		sound.Parent = playerGui
 		sound:Play()
 
-		-- Đợi 4 giây mới ẩn jumpscare và GUI
 		task.wait(2)
-
 		screenGui:Destroy()
 
-		-- Giảm HP của player xuống 0 (chắc chắn chết)
 		if character:FindFirstChild("Humanoid") then
 			character.Humanoid.Health = 0
 		end
@@ -175,13 +168,11 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		if stats and stats:FindFirstChild("Player_" .. player.Name) then
 			stats["Player_" .. player.Name].Total.DeathCause.Value = "A-200"
 		end
-
 	else
 		print("Entity has damaged the player")
-		-- Bạn có thể giữ hoặc chỉnh phần gây damage thường ở đây
 	end
 end)
 
----====== Run entity ======---
+--====== Run entity ======--
 
 entity:Run()
