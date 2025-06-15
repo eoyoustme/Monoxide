@@ -117,7 +117,7 @@ end
 local Jumpscare = GetGitSound("https://github.com/eoyoustme/Monoxide/blob/main/lv_0_20250103234053.mp3","A60")
 Jumpscare.Parent = workspace
 Jumpscare.Volume = 3
-Jumpscare.PlaybackSpeed = 0.9
+Jumpscare.PlaybackSpeed = 1
 Jumpscare:Play()
 
 local JumpscareGui = game:GetService("RunService").RenderStepped:Connect(function()
