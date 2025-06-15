@@ -29,7 +29,7 @@ local entity = spawner.Create({
 	Movement = {
 		Speed = 60,
 		Delay = 2,
-		Reversed = true
+		Reversed = false
 	},
 	Rebounding = {
 		Enabled = true,
@@ -56,12 +56,16 @@ local entity = spawner.Create({
 	}
 })
 
----====== Behavior callbacks ======---
+---====== Logic chasing player khi không núp ======---
+
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local chaseConnection
 
 entity:SetCallback("OnSpawned", function()
 	print("Entity has spawned")
 
-	-- Tạo sương mù
+	-- Tạo sương mù dày đặc màu đỏ
 	local lighting = game:GetService("Lighting")
 	local atmosphere = Instance.new("Atmosphere")
 	atmosphere.Name = "A200Fog"
@@ -75,127 +79,106 @@ end)
 entity:SetCallback("OnStartMoving", function()
 	print("Entity has started moving")
 
-	local Players = game:GetService("Players")
-	local RunService = game:GetService("RunService")
+	chaseConnection = RunService.Heartbeat:Connect(function(deltaTime)
+		local player = Players.LocalPlayer
+		if not player then return end
 
-	-- Bắt đầu kiểm tra xem người chơi có đang núp không
-	local connection
-	connection = RunService.Heartbeat:Connect(function()
-		for _, player in pairs(Players:GetPlayers()) do
-			local character = player.Character
-			if character and character:FindFirstChild("HumanoidRootPart") then
-				local isHiding = false
+		local character = player.Character
+		if character and character:FindFirstChild("HumanoidRootPart") then
+			local isHiding = character:FindFirstChild("Hiding") or player:GetAttribute("Hidden") == true
 
-				if character:FindFirstChild("Hiding") or player:GetAttribute("Hidden") == true then
-					isHiding = true
-				end
-
-				if isHiding then
-					print(player.Name .. " is hiding, entity ignores them")
-					-- Có thể xử lý logic bỏ qua đuổi theo nếu cần
-				else
-					print(player.Name .. " is not hiding, chasing")
-					-- Logic đuổi theo nếu cần thêm
+			if not isHiding then
+				-- Player không núp, di chuyển entity đến gần player giữ tốc độ
+				local targetPos = character.HumanoidRootPart.Position
+				local model = entity.Model
+				if model and model.PrimaryPart then
+					local direction = (targetPos - model.PrimaryPart.Position).Unit
+					local newPos = model.PrimaryPart.Position + direction * entity.Config.Movement.Speed * deltaTime
+					model:SetPrimaryPartCFrame(CFrame.new(newPos, targetPos))
 				end
 			end
 		end
 	end)
-
-	entity:SetCallback("OnDespawned", function()
-		print("Entity has despawned")
-		
-		-- Xóa sương mù khi biến mất
-		local lighting = game:GetService("Lighting")
-		local fog = lighting:FindFirstChild("A200Fog")
-		if fog then
-			fog:Destroy()
-		end
-
-		if connection then connection:Disconnect() end
-	end)
 end)
+
+entity:SetCallback("OnDespawned", function()
+	print("Entity has despawned")
+
+	-- Xóa sương mù khi entity biến mất
+	local lighting = game:GetService("Lighting")
+	local fog = lighting:FindFirstChild("A200Fog")
+	if fog then
+		fog:Destroy()
+	end
+
+	if chaseConnection then
+		chaseConnection:Disconnect()
+		chaseConnection = nil
+	end
+end)
+
+---====== Callback OnDamagePlayer với jumpscare mạnh hơn khi giết ======---
 
 entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
 		print("Entity has killed the player")
-	else
-		print("Entity has damaged the player")
 
-		-- Âm thanh
-		local cue2 = Instance.new("Sound")
-		cue2.Parent = game.Workspace
-		cue2.Name = "Spawn"
-		cue2.SoundId = "rbxassetid://912345678" -- Thay bằng ID âm thanh hợp lệ
-		cue2.Volume = 4.5
-		cue2.PlaybackSpeed = 2
-		cue2:Play()
-
-		-- GUI jumpscare
 		local player = game.Players.LocalPlayer
 		local character = player.Character or player.CharacterAdded:Wait()
 		local playerGui = player:WaitForChild("PlayerGui")
 
+		-- Tạo GUI jumpscare
 		local screenGui = Instance.new("ScreenGui")
-		screenGui.Name = "RandomImageGui"
+		screenGui.Name = "DeathJumpscareGui"
 		screenGui.IgnoreGuiInset = true
 		screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 		screenGui.Parent = playerGui
 
+		-- Background đỏ phủ full màn hình, không trong suốt luôn
 		local Background = Instance.new("Frame")
 		Background.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 		Background.BorderSizePixel = 0
 		Background.Size = UDim2.new(1, 0, 1, 0)
 		Background.ZIndex = 999
-		Background.BackgroundTransparency = 1
+		Background.BackgroundTransparency = 0
 		Background.Parent = screenGui
 
-		local imageIds = {
-			"16249498432",
-			"16249498432",
-			"16249498432"
-		}
-
-		local function getRandomImageId()
-			return imageIds[math.random(1, #imageIds)]
-		end
-
+		-- Image jumpscare to rõ ở giữa màn hình
 		local imageLabel = Instance.new("ImageLabel")
-		imageLabel.Size = UDim2.new(0, 0, 0, 0)
+		imageLabel.Size = UDim2.new(0, 700, 0, 700)
 		imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
 		imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
 		imageLabel.BackgroundTransparency = 1
-		imageLabel.Image = "rbxassetid://" .. getRandomImageId()
-		imageLabel.ImageTransparency = 1
+		imageLabel.Image = "rbxassetid://16249498432" -- Thay ID hình thực tế
+		imageLabel.ImageTransparency = 0
 		imageLabel.Parent = screenGui
 
-		local TweenService = game:GetService("TweenService")
-		local appearTween = TweenService:Create(imageLabel, TweenInfo.new(0.1), {
-			Size = UDim2.new(0, 580, 0, 580),
-			ImageTransparency = 0
-		})
-		local rotateTween = TweenService:Create(imageLabel, TweenInfo.new(0.1), {
-			Rotation = math.random(10, 18)
-		})
+		-- Âm thanh jumpscare lớn và rõ
+		local sound = Instance.new("Sound")
+		sound.Parent = game.Workspace
+		sound.SoundId = "rbxassetid://85271883712040" -- Thay ID âm thanh thực tế
+		sound.Volume = 6
+		sound.PlaybackSpeed = 1
+		sound:Play()
 
-		appearTween:Play()
-		wait(0.2)
-		rotateTween:Play()
-		wait(0.8)
+		-- Đợi 4 giây mới ẩn jumpscare và GUI
+		task.wait(2)
 
-		TweenService:Create(Background, TweenInfo.new(2), {BackgroundTransparency = 1}):Play()
-		TweenService:Create(imageLabel, TweenInfo.new(1.5), {ImageTransparency = 1}):Play()
-
-		task.wait(3)
 		screenGui:Destroy()
 
+		-- Giảm HP của player xuống 0 (chắc chắn chết)
 		if character:FindFirstChild("Humanoid") then
-			character.Humanoid.Health -= 10
+			character.Humanoid.Health = 0
 		end
 
 		local stats = game.ReplicatedStorage:FindFirstChild("GameStats")
 		if stats and stats:FindFirstChild("Player_" .. player.Name) then
 			stats["Player_" .. player.Name].Total.DeathCause.Value = "A-200"
 		end
+
+	else
+		print("Entity has damaged the player")
+		-- Bạn có thể giữ hoặc chỉnh phần gây damage thường ở đây
 	end
 end)
 
