@@ -1,7 +1,5 @@
 require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("",true)
-wait(2) require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("",true)
+wait(2) require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("This flashligth",true)
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Functions.lua"))()
-    local tool = LoadCustomInstance("rbxassetid://119101382742656")
-    tool.Parent = game:GetService("Players").LocalPlayer.Backpack
-    tool.Animations.idle.AnimationId = "rbxassetid://10479585177"
+LoadCustomInstance("https://github.com/RegularVynixu/Utilities/raw/main/Doors/Item%20Spawner/Assets/Crucifix.rbxm").Parent = game:GetService("Players").LocalPlayer.Backpack
