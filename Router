@@ -20,8 +20,8 @@ function light(tim,color0,color1)
 end
 
 local sound = Instance.new("Sound",game.Workspace)
-sound.SoundId = "rbxassetid://4499400560"
-sound.PlaybackSpeed = 0.05
+sound.SoundId = "rbxassetid://2396797933
+sound.PlaybackSpeed = 0.5
 sound.Volume = 5
 local octave = Instance.new("PitchShiftSoundEffect",sound)
 octave.Octave = 0.5
@@ -37,10 +37,10 @@ task.wait(3.5)
 moved = game.Players.LocalPlayer.Character.Humanoid.Running:connect(function()
 	moved:Disconnect()
 	local sound = Instance.new("Sound",game.Workspace)
-	sound.SoundId = "rbxassetid://8325519723"
+	sound.SoundId = "rbxassetid://3317082923"
 	sound.Volume = 1
 	local octave = Instance.new("PitchShiftSoundEffect",sound)
-	octave.Octave = 0.5
+	octave.Octave = 1
 	
 	local screen = Instance.new("ScreenGui",game.Players.LocalPlayer.PlayerGui)
 	
@@ -48,7 +48,7 @@ moved = game.Players.LocalPlayer.Character.Humanoid.Running:connect(function()
 	background.AnchorPoint = Vector2.new(0.5,0.5)
 	background.Position = UDim2.new(0.5,0,0.5,0)
 	background.Size = UDim2.new(0,1500,0,1500)
-	background.Image = "http://www.roblox.com/asset/?id=109175784657012"
+	background.Image = "http://www.roblox.com/asset/?id=17235654015"
 	
 	sound:Play()
 	
