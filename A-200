@@ -15,7 +15,7 @@ local entity = spawner.Create({
 			Enabled = false,
 			Duration = 1
 		},
-		Shatter = true,
+		Shatter = false,
 		Repair = false
 	},
 	Earthquake = {
@@ -56,67 +56,30 @@ local entity = spawner.Create({
 	}
 })
 
---====== Di chuyển đuổi theo người chơi khi không núp ======--
-
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local chaseConnection
+--====== SƯƠNG MÙ KHI XUẤT HIỆN ======--
 
 entity:SetCallback("OnSpawned", function()
 	print("Entity has spawned")
 
-	-- Tạo sương mù
-	local atmosphere = Instance.new("Atmosphere")
-	atmosphere.Name = "A200Fog"
-	atmosphere.Density = 1
-	atmosphere.Offset = 0.2
-	atmosphere.Color = Color3.fromRGB(255, 255, 255)
-	atmosphere.Decay = Color3.fromRGB(255, 255, 255)
-	atmosphere.Parent = game:GetService("Lighting")
-end)
-
-entity:SetCallback("OnStartMoving", function()
-	print("Entity has started moving")
-
-	chaseConnection = RunService.Heartbeat:Connect(function(dt)
-		local player = Players.LocalPlayer
-		if not player then return end
-
-		local char = player.Character
-		if char and char:FindFirstChild("HumanoidRootPart") then
-			local isHiding = char:FindFirstChild("Hiding") or player:GetAttribute("Hidden") == true
-
-			if not isHiding then
-				local model = entity.Model
-				if model and model.PrimaryPart then
-					local targetPos = char.HumanoidRootPart.Position
-					local currentPos = model.PrimaryPart.Position
-					local direction = (targetPos - currentPos)
-
-					if direction.Magnitude > 1 then
-						direction = direction.Unit
-						local move = direction * entity.Config.Movement.Speed * dt
-						model:SetPrimaryPartCFrame(CFrame.new(currentPos + move, targetPos))
-					end
-				end
-			end
-		end
-	end)
+	local fog = Instance.new("Atmosphere")
+	fog.Name = "A200Fog"
+	fog.Density = 1
+	fog.Offset = 0.2
+	fog.Color = Color3.fromRGB(255, 255, 255)
+	fog.Decay = Color3.fromRGB(100, 255, 255)
+	fog.Parent = game:GetService("Lighting")
 end)
 
 entity:SetCallback("OnDespawned", function()
 	print("Entity has despawned")
 
 	local fog = game:GetService("Lighting"):FindFirstChild("A200Fog")
-	if fog then fog:Destroy() end
-
-	if chaseConnection then
-		chaseConnection:Disconnect()
-		chaseConnection = nil
+	if fog then
+		fog:Destroy()
 	end
 end)
 
---====== Jumpscare khi giết người chơi ======--
+--====== JUMPSCARE KHI GIẾT NGƯỜI CHƠI ======--
 
 entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
@@ -141,7 +104,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		background.Parent = screenGui
 
 		local imageLabel = Instance.new("ImageLabel")
-		imageLabel.Size = UDim2.new(0, 700, 0, 700)
+		imageLabel.Size = UDim2.new(0, 300, 0, 300)
 		imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
 		imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
 		imageLabel.BackgroundTransparency = 1
@@ -153,7 +116,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		local sound = Instance.new("Sound")
 		sound.SoundId = "rbxassetid://85271883712040"
 		sound.Volume = 6
-		sound.PlaybackSpeed = 2 -- âm thanh nhanh hơn
+		sound.PlaybackSpeed = 2
 		sound.Parent = playerGui
 		sound:Play()
 
