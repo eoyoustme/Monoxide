@@ -211,7 +211,7 @@ game.Players.LocalPlayer.Character.Humanoid.Health -= 10
 game.ReplicatedStorage.GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "Multi Monster"
 
 end)
-wait(3)
+wait(2)
 Jumpscare:Destroy()
 JumpscareGui:Disconnect()
 end
