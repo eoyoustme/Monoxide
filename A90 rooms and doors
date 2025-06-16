@@ -1,0 +1,95 @@
+-- 📡 Phát tiếng rè cảnh báo
+local static = Instance.new("Sound")
+static.SoundId = "rbxassetid://92453621152905"
+static.Parent = game.ReplicatedStorage
+static.Name = "Se"
+static.Pitch = 0.6
+static.Volume = 1.5
+static.TimePosition = 0.2
+static:Play()
+
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local humanoid = char:WaitForChild("Humanoid")
+
+-- 🖼️ Cảnh báo đứng yên
+local GUI = Instance.new("ScreenGui")
+GUI.Name = "WarningGui"
+GUI.IgnoreGuiInset = true
+GUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+GUI.Parent = player:WaitForChild("PlayerGui")
+
+local image = Instance.new("ImageLabel")
+image.BackgroundTransparency = 1
+image.Size = UDim2.new(1, 0, 1, 0)
+image.Image = "rbxassetid://90187712054412" -- Ảnh cảnh báo "STOP"
+image.Parent = GUI
+
+-- ⏳ Đếm ngược thời gian đứng yên
+local standStillTime = 2.652
+local moveDetected = false
+
+for i = 1, standStillTime * 10 do
+	task.wait(0.1)
+	if humanoid.MoveDirection.Magnitude > 0 then
+		moveDetected = true
+		break
+	end
+end
+
+-- 💀 Nếu người chơi di chuyển → jumpscare
+if moveDetected then
+	GUI:Destroy()
+
+	-- Giao diện jumpscare
+	local jumpscareGUI = Instance.new("ScreenGui")
+	jumpscareGUI.Name = "JumpscareGui"
+	jumpscareGUI.IgnoreGuiInset = true
+	jumpscareGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	jumpscareGUI.Parent = player:WaitForChild("PlayerGui")
+
+	local face = Instance.new("ImageLabel")
+	face.BackgroundTransparency = 1
+	face.Size = UDim2.new(1, 0, 1, 0)
+	face.Image = "rbxassetid://71480847652585" -- 😱 Khuôn mặt jumpscare bạn nói
+	face.ImageTransparency = 0
+	face.Parent = jumpscareGUI
+
+	-- Âm thanh jumpscare
+	local jumpSound = Instance.new("Sound")
+	jumpSound.SoundId = "rbxassetid://124085357123084" -- Âm scream
+	jumpSound.Volume = 10
+	jumpSound.Parent = jumpscareGUI
+	jumpSound:Play()
+
+	-- Gây sát thương sau 2 giây
+	task.wait(3)
+	humanoid:TakeDamage(40)
+
+	-- Gửi death hint nếu đang dùng game như DOORS
+	local stats = game.ReplicatedStorage:FindFirstChild("GameStats")
+	if stats then
+		local deathCause = stats:FindFirstChild("Player_" .. player.Name)
+		if deathCause then
+			deathCause.Total.DeathCause.Value = "Paralysis"
+		end
+	end
+
+	pcall(function()
+		firesignal(game.ReplicatedStorage.RemotesFolder.DeathHint.OnClientEvent,
+			{"You died to who you call Paralysis.", "Try your best to not move at all.", "He can sense you with sound."},
+			"Yellow"
+		)
+	end)
+
+	-- Xoá GUI sau khi chết
+	humanoid.Died:Connect(function()
+		task.wait(1)
+		if jumpscareGUI and jumpscareGUI.Parent then
+			jumpscareGUI:Destroy()
+		end
+	end)
+else
+	task.wait(1)
+	GUI:Destroy()
+end
