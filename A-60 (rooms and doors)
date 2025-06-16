@@ -28,7 +28,7 @@ local entity = spawner.Create({
 		Reversed = false
 	},
 	Rebounding = {
-		Enabled = true,
+		Enabled = false,
 		Type = "Ambush",
 		Min = 1,
 		Max = 1,
@@ -37,7 +37,7 @@ local entity = spawner.Create({
 	Damage = {
 		Enabled = true,
 		Range = 40,
-		Amount = 125
+		Amount = 12
 	},
 	Crucifixion = {
 		Enabled = true,
@@ -124,31 +124,50 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 	imageLabel.Size = UDim2.new(0, 0, 0, 0)
 	imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
 	imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
-	imageLabel.Image = "rbxassetid://" .. ({
-		"12145534911", "12145554242", "12145599498", "12145599275", "12155335619",
-		"12145598814", "12146135062", "11378285585", "1972219024", "1822114127",
-		"3413871766", "3354536350", "17865063", "4749623118", "1857893092",
-		"4508624823", "6309704436", "10458678325"
-	})[math.random(1, 18)]
+	imageLabel.Image = "rbxassetid://12145534911"
 	imageLabel.ImageTransparency = 1
 	imageLabel.BackgroundTransparency = 1
 	imageLabel.ImageColor3 = Color3.fromRGB(255, 0, 0)
 	imageLabel.ZIndex = 999
 
-	-- Tween animation
 	local TweenService = game:GetService("TweenService")
-	local info = TweenInfo.new(0.1, Enum.EasingStyle.Linear)
-	TweenService:Create(imageLabel, info, {Size = UDim2.new(0, 580, 0, 580), ImageTransparency = 0}):Play()
-	TweenService:Create(imageLabel, info, {Rotation = math.random(10, 18)}):Play()
+	local tweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Linear)
 
+	-- Tween in
+	TweenService:Create(imageLabel, tweenInfo, {
+		Size = UDim2.new(0, 580, 0, 580),
+		ImageTransparency = 0,
+		Rotation = math.random(10, 18)
+	}):Play()
+
+	-- Image switching logic
+	local faces = {
+		"12145534911", "12145554242", "12145599498", "12145599275", "12155335619",
+		"12145598814", "12146135062", "11378285585", "1972219024", "1822114127",
+		"3413871766", "3354536350", "17865063", "4749623118", "1857893092",
+		"4508624823", "6309704436", "10458678325"
+	}
+
+	local running = true
+	task.spawn(function()
+		while running do
+			imageLabel.Image = "rbxassetid://" .. faces[math.random(1, #faces)]
+			task.wait(0.07)
+		end
+	end)
+
+	-- Fade out
 	wait(0.2)
 	wait(0.8)
 	TweenService:Create(background, TweenInfo.new(2), {BackgroundTransparency = 1}):Play()
 	TweenService:Create(imageLabel, TweenInfo.new(1.5), {ImageTransparency = 1}):Play()
 
-	task.wait(3)
+	task.wait(2)
+	running = false
 	gui:Destroy()
 	jumpSound:Destroy()
+
+	-- Final effects
 	game.Players.LocalPlayer.Character.Humanoid.Health -= 10
 	game.ReplicatedStorage.GameStats["Player_"..player.Name].Total.DeathCause.Value = "Multi Monster"
 end)
