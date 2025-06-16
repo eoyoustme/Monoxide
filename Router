@@ -37,7 +37,7 @@ task.wait(3.5)
 moved = game.Players.LocalPlayer.Character.Humanoid.Running:connect(function()
 	moved:Disconnect()
 	local sound = Instance.new("Sound",game.Workspace)
-	sound.SoundId = "rbxassetid://3317082923"
+	sound.SoundId = "rbxassetid://6567183465"
 	sound.Volume = 1
 	local octave = Instance.new("PitchShiftSoundEffect",sound)
 	octave.Octave = 1
