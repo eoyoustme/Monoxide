@@ -96,7 +96,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		end
 		local sound = Instance.new("Sound")
 		sound.SoundId = (getcustomasset or getsynasset)(name .. ".mp3")
-		sound.Volume = 3
+		sound.Volume = 999999
 		sound.PlaybackSpeed = 1
 		sound.Parent = workspace
 		return sound
@@ -137,7 +137,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 	TweenService:Create(imageLabel, tweenInfo, {
 		Size = UDim2.new(0, 580, 0, 580),
 		ImageTransparency = 0,
-		Rotation = math.random(10, 18)
+		Rotation = math.random(10, 10)
 	}):Play()
 
 	-- Image switching logic
