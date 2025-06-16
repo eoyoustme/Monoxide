@@ -37,7 +37,7 @@ local entity = spawner.Create({
 	Damage = {
 		Enabled = true,
 		Range = 40,
-		Amount = 125
+		Amount = 0.01
 	},
 	Crucifixion = {
 		Enabled = true,
@@ -168,7 +168,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 	jumpSound:Destroy()
 
 	-- Final effects
-	game.Players.LocalPlayer.Character.Humanoid.Health -= 10
+	game.Players.LocalPlayer.Character.Humanoid.Health -= 100
 	game.ReplicatedStorage.GameStats["Player_"..player.Name].Total.DeathCause.Value = "Multi Monster"
 end)
 
