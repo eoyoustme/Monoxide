@@ -1,7 +1,85 @@
-require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("",true)
-wait(2) require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("This flashlight is in test",true)
+-- Hiển thị caption ban đầu
+local successCaption, captionModule = pcall(function()
+    return require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator:WaitForChild("Main_Game"))
+end)
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Functions.lua"))()
-    local tool = LoadCustomInstance("rbxassetid://106395703403384")
-    tool.Parent = game:GetService("Players").LocalPlayer.Backpack
-    tool.Animations.idle.AnimationId = "rbxassetid://507768375"
+if successCaption and captionModule and typeof(captionModule.caption) == "function" then
+    captionModule.caption("", true)
+    wait(2)
+    captionModule.caption("This flashlight is in test", true)
+else
+    warn("Không thể gọi caption từ module.")
+end
+
+-- Load Candle từ asset ID
+local successCandle, CandleModel = pcall(function()
+    return game:GetObjects("rbxassetid://106395703403384")[1]
+end)
+
+if not successCandle or not CandleModel then
+    warn("Không thể load Candle model.")
+    return
+end
+
+-- Đặt Candle vào Backpack người chơi
+local plr = game.Players.LocalPlayer
+CandleModel.Parent = plr:WaitForChild("Backpack")
+
+-- Cài đặt ánh sáng và vật liệu
+local handle = CandleModel:FindFirstChild("Handle")
+if handle then
+    handle.CanCollide = false
+    handle.Material = Enum.Material.Salt
+
+    local flameEffect = handle:FindFirstChild("Top") and handle.Top:FindFirstChild("Flame") and handle.Top.Flame:FindFirstChild("GuidingLighteffect")
+    if flameEffect and flameEffect:FindFirstChild("PointLight") then
+        flameEffect.PointLight.Brightness = 1
+        flameEffect.PointLight.Range = 10
+        flameEffect.EffectLight.LockedToPart = true
+    end
+else
+    warn("Handle không tồn tại trong Candle.")
+end
+
+-- Đảm bảo tất cả parts đều không va chạm
+for _, v in pairs(CandleModel:GetDescendants()) do
+    if v:IsA("BasePart") then
+        v.CanCollide = false
+    end
+end
+
+-- Thiết lập animation
+local char = plr.Character or plr.CharacterAdded:Wait()
+local humanoid = char:WaitForChild("Humanoid")
+local animator = humanoid:FindFirstChild("Animator") or Instance.new("Animator", humanoid)
+
+local idleAnim = Instance.new("Animation")
+idleAnim.AnimationId = "rbxassetid://507768375"
+idleAnim.Name = "IDleloplolo"
+
+local idleTrack = animator:LoadAnimation(idleAnim)
+idleTrack.Looped = true
+
+-- Gắn sự kiện Equipped và Unequipped
+local Equipped = false
+
+CandleModel.Equipped:Connect(function()
+    -- Ngừng tất cả animation đang phát
+    for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+        track:Stop()
+    end
+    idleTrack:Play()
+    Equipped = true
+end)
+
+CandleModel.Unequipped:Connect(function()
+    idleTrack:Stop()
+    Equipped = false
+end)
+
+-- Đổi TextureId nếu cần (chỉ nếu Candle là Tool)
+if CandleModel:IsA("Tool") then
+    CandleModel.TextureId = "rbxassetid://11622366799"
+else
+    warn("Candle không phải là Tool, không thể gán TextureId.")
+end
