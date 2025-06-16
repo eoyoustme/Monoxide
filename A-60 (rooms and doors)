@@ -5,7 +5,7 @@ local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/Regul
 local entity = spawner.Create({
 	Entity = {
 		Name = "A-60",
-		Asset = "rbxassetid://92086562769572",
+		Asset = "rbxassetid://95529336979350",
 		HeightOffset = 0
 	},
 	Lights = {
@@ -13,10 +13,10 @@ local entity = spawner.Create({
 			Enabled = true,
 			Duration = 1
 		},
-		Shatter = true,
+		Shatter = false,
 		Repair = false
 	},
-	Earthquake = { Enabled = true },
+	Earthquake = { Enabled = false },
 	CameraShake = {
 		Enabled = true,
 		Range = 100,
