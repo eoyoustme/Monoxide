@@ -54,7 +54,7 @@ local humanoid = char:WaitForChild("Humanoid")
 local animator = humanoid:FindFirstChild("Animator") or Instance.new("Animator", humanoid)
 
 local idleAnim = Instance.new("Animation")
-idleAnim.AnimationId = "rbxassetid://507768375"
+idleAnim.AnimationId = "rbxassetid://9982615727"
 idleAnim.Name = "IDleloplolo"
 
 local idleTrack = animator:LoadAnimation(idleAnim)
