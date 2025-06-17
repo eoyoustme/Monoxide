@@ -27,16 +27,12 @@ local entity = spawner.Create({
 		Values = {1.5, 20, 0.1, 1}
 	},
 	Movement = {
-		Speed = 100,
-		Delay = 2,
+		Speed = 0,      -- Speed 0 để entity không di chuyển
+		Delay = 0,
 		Reversed = false
 	},
 	Rebounding = {
-		Enabled = true,
-		Type = "Ambush",
-		Min = 1,
-		Max = 1,
-		Delay = 2
+		Enabled = false,  -- Tắt rebounding để entity đứng yên
 	},
 	Damage = {
 		Enabled = true,
@@ -50,8 +46,8 @@ local entity = spawner.Create({
 		Break = true
 	},
 	Death = {
-		Type = "Guiding",
-		Hints = {"Death", "Hints", "Go", "Here"},
+		Type = "Curious",
+		Hints = {"You die to A-333", "That all", "Goodbye", "GOODBYE!"},
 		Cause = ""
 	}
 })
