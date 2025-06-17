@@ -1,156 +1,213 @@
+-- Gọi Spawner
 local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/DoorEntitySpawn%2BSource'))()
 
-
--- Create entity
+-- Tạo thực thể G-95
 local entity = Spawner.createEntity({
-    CustomName = "G-95", -- Custom name of your entity
-    Model = "rbxassetid://90952177926561", -- Can be GitHub file or rbxassetid
-    Speed = 380, -- Percentage, 100 = default Rush speed
-    DelayTime = 0.1, -- Time before starting cycles (seconds)
-    HeightOffset = 0.1,
-    CanKill = true,
+    CustomName = "G-95",
+    Model = "rbxassetid://78561638840681",
+    Speed = 525,
+    DelayTime = 9,
+    HeightOffset = 4.1,
+    CanKill = false,
     NoDieOnCrouching = false,
     NoHiding = false,
     AntiCrucifix = false,
-    KillRange = 30,
+    KillRange = 40,
     OneRoom = false,
     DieOnLook = false,
     BreakLights = true,
     BackwardsMovement = false,
-     MovementDeath = {
-        false, -- Turned On?
-        '1',  --- '1'= 'Instant Without Being Looked out' | '2' = 'With Being Looked At'
-    },
-    FlickerLights = {
-        false, -- Enabled/Disabled
-        80 -- Time (seconds)
-    },
-    Cycles = {
-        Min = 6,
-        Max = 6,
-        WaitTime = 1,
-    },
+    MovementDeath = { false, '1' },
+    FlickerLights = { false, 80 },
+    Cycles = { Min = 13, Max = 13, WaitTime = 1 },
     CamShake = {
-        true, -- Enabled/Disabled
-        {3.5, 20, 0.1, 1}, -- Shake values (don't change if you don't know)
-        100, -- Shake start distance (from Entity to you)
+        true,
+        {3.5, 20, 0.1, 1},
+        100,
     },
     Jumpscare = {
-        false, -- Enabled/Disabled
+        false,
         {
-            Type = "1", -- "Normal" or 1 | "Pop" or 2 | "endlessdoorsrebound" or "Rebound" or 3 | More coming Soon
-            Image1 = "rbxassetid://14546302778", -- Image1 url
-            Image2 = "rbxassetid://13328029517", -- Image2 url
+            Type = "1",
+            Image1 = "rbxassetid://74330632949039",
+            Image2 = "rbxassetid://74330632949039",
             Shake = true,
-            Sound1 = {
-                "0", -- SoundId Link or Roblox ID
-                { Volume = 0 }, -- Sound properties
-            },
-            Sound2 = {
-                "5257382967", -- SoundId Link or Roblox ID
-                { Volume = 3 }, -- Sound properties
-            },
-            Flashing = {
-                true, -- Enabled/Disabled
-                Color3.fromRGB(48, 25, 52), -- Color
-            },
-            Tease = {
-                false, -- Enabled/Disabled
-                Min = 1,
-                Max = 1,
-            },
+            Sound1 = { "0", { Volume = 0 } },
+            Sound2 = { "5263560566", { Volume = 3 } },
+            Flashing = { true, Color3.fromRGB(0, 0, 255) },
+            Tease = { false, Min = 1, Max = 1 },
         },
     },
-    Color = 'GuidingLight', -- CuriousLight ( Yellow ) | GuidingLight ( Blue )
+    Color = 'GuidingLight',
     DiffrentMessages = false,
     CustomDialog = {  
-        {"Claim has seen you.", "It will consume anyone on sight.", "It takes a bit to fully spawn in", "so you can use that to your advantage."}, -- Death Messages
+        {"Claim has seen you.", "It will consume anyone on sight.", "It takes a bit to fully spawn in", "so you can use that to your advantage."},
         {"Stop Dieing"},
         {"Bruh", "Use what you have learned from Rush!"},
         {"It seems like Template is causing quite the ruckus...", "Hide in a closet or bed as quickly as possible!"},
-         {"I have told You What to do", "YOU JUST HAVE A SKILL ISSUE"}
+        {"I have told You What to do", "YOU JUST HAVE A SKILL ISSUE"}
     }
 })
 
------[[ Advanced Sctipting ]]-----
-
-entity.Debug.OnEntityMoving = function(Invincible,Hiding,plrCollisionPoint)
-print("Invincible: "..tostring(Invincible))
-print("Player to Entity Collision (None hiding Point): "..tostring(plrCollisionPoint))
-print("Hiding: "..tostring(Hiding))
-end
-       
+-- Debug events
 entity.Debug.OnEntitySpawned = function()
-    print("Entity has spawned:")
-game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(0, 255, 0)
-game.Lighting.MainColorCorrection.Contrast = 0.2
-game.Lighting.MainColorCorrection.Saturation = -0.7
-local tween = game:GetService("TweenService")
-tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {Contrast = 0}):Play()
-tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {Saturation = 0}):Play()
-local TweenService = game:GetService("TweenService")
-local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
-TW:Play()
+    print("Entity has spawned.")
+    
+    local lighting = game.Lighting
+    local tween = game:GetService("TweenService")
+    
+    lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
+    lighting.MainColorCorrection.Contrast = 10
+    
+    tween:Create(lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+    tween:Create(lighting.MainColorCorrection, TweenInfo.new(5), {TintColor = Color3.fromRGB(250, 0, 0)}):Play()
 end
 
 entity.Debug.OnEntityDespawned = function()
-    print("Entity has despawned:")
+    print("Entity has despawned.")
 
----====== Load achievement giver ======---
-local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
+    local lighting = game.Lighting
+    local tween = game:GetService("TweenService")
 
----====== Display achievement ======---
-achievementGiver({
-    Title = "Im The OrigiNal",
-    Desc = "Black",
-    Reason = "Survive the Entity G-95",
-    Image = "rbxassetid://3100736018"
-})
-Followed:Destroy()
-end
+    task.wait(3)
 
-entity.Debug.OnEntityFinishedRebound = function()
-    print("Entity has finished rebound:")
-end
+    lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
+    lighting.MainColorCorrection.Contrast = 10
 
-entity.Debug.OnEntityEnteredRoom = function(entityTable, room)
-    print("Entity:", "has entered room:",room)
-end
+    tween:Create(lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+    tween:Create(lighting.MainColorCorrection, TweenInfo.new(5), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
 
-entity.Debug.OnLookAtEntity = function()
-    print("Player has looked at entity:")
+    -- Achievement
+    local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
+    achievementGiver({
+        Title = "",
+        Desc = "",
+        Reason = "",
+        Image = "rbxassetid://"
+    })
 end
 
 entity.Debug.OnDeath = function()
     warn("Player has died.")
-    local func, setupval, getinfo, typeof, getgc, next = nil, debug.setupvalue or setupvalue, debug.getinfo or getinfo, typeof, getgc, next
 
-for i,v in next, getgc(false) do
-    if typeof(v) == "function" then
-        local info = getinfo(v)
-        if info.currentline == 54 and info.nups == 2 and info.is_vararg == 0 then
-            func = v
-            break
+    local func, setupval, getinfo, typeof, getgc, next = nil, debug.setupvalue or setupvalue, debug.getinfo or getinfo, typeof, getgc, next
+    for i,v in next, getgc(false) do
+        if typeof(v) == "function" then
+            local info = getinfo(v)
+            if info.currentline == 54 and info.nups == 2 and info.is_vararg == 0 then
+                func = v
+                break
+            end
         end
     end
-end
-
-local function DeathHint(hints, type: string)
-    setupval(func, 1, hints)
-    if type ~= nil then
-        setupval(func, 2, type)
+    local function DeathHint(hints, type)
+        setupval(func, 1, hints)
+        if type ~= nil then
+            setupval(func, 2, type)
+        end
     end
+
+    DeathHint({
+        "You died to who you call G-95",
+        "This Entity is so fast! Try to hide quickly!",
+        "It comes straight from hell to make you suffer.",
+        "..Avoid eye contact at all cost."
+    }, "Blue")
 end
 
-DeathHint({
-    "You died to who you Call G-95",
-    "This Entity its So Faster So try Hide",
-    "Its from to hell He Make YoU Suffer",
-    "..-so avoid Eye Contact"
-}, "Blue") -- "Blue" or "Yellow"
-end
+-- Biến kiểm soát jumpscare (dừng entity di chuyển)
+local isJumpscare = false
 
-------------------------
-
--- Run the created entity
+-- Chạy entity
 Spawner.runEntity(entity)
+
+-- 👁️ Jumpscare logic với raycast check xuyên tường, dừng entity lúc jumpscare
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local camera = workspace.CurrentCamera
+
+local player = Players.LocalPlayer
+local entityModel = nil
+local entityPart = nil
+local triggered = false
+
+-- Đợi entity load
+task.spawn(function()
+    while not entityModel do
+        entityModel = workspace:FindFirstChild("G-95")
+        if entityModel then
+            entityPart = entityModel:FindFirstChild("part") or entityModel:FindFirstChildWhichIsA("BasePart") or entityModel.PrimaryPart
+        end
+        task.wait(0.1)
+    end
+end)
+
+RunService.Heartbeat:Connect(function()
+    if triggered or isJumpscare then return end
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") or not entityPart then return end
+
+    local playerPos = player.Character.HumanoidRootPart.Position
+    local entityPos = entityPart.Position
+    local dist = (playerPos - entityPos).Magnitude
+
+    if dist <= entity.Config.KillRange then
+        -- Raycast kiểm tra vật cản giữa player và entity
+        local rayParams = RaycastParams.new()
+        rayParams.FilterDescendantsInstances = {player.Character}
+        rayParams.FilterType = Enum.RaycastFilterType.Blacklist
+
+        local rayResult = workspace:Raycast(playerPos, entityPos - playerPos, rayParams)
+
+        if rayResult == nil or rayResult.Instance:IsDescendantOf(entityModel) then
+            triggered = true
+            isJumpscare = true
+
+            -- Dừng entity di chuyển bằng cách tắt Speed (nếu được)
+            entity.Speed = 0
+
+            -- Lock camera nhìn thẳng vào entity
+            camera.CameraType = Enum.CameraType.Scriptable
+            camera.CFrame = CFrame.new(player.Character.Head.Position, entityPart.Position)
+
+            TweenService:Create(camera, TweenInfo.new(1), {
+                CFrame = CFrame.new(player.Character.Head.Position, entityPart.Position)
+            }):Play()
+
+            task.wait(1.5)
+
+            -- Hiện jumpscare GUI
+            local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+            gui.Name = "JumpscareGUI"
+            local img = Instance.new("ImageLabel", gui)
+            img.Size = UDim2.new(1, 0, 1, 0)
+            img.Position = UDim2.new(0, 0, 0, 0)
+            img.Image = "rbxassetid://14865476959" -- thay id hình jumpscare bạn muốn
+            img.BackgroundTransparency = 1
+            img.ImageTransparency = 1
+
+            TweenService:Create(img, TweenInfo.new(0.5), {ImageTransparency = 0}):Play()
+
+            -- Play sound jumpscare
+            local sound = Instance.new("Sound", workspace)
+            sound.SoundId = "rbxassetid://6567183465"
+            sound.Volume = 3
+            sound:Play()
+
+            task.wait(1)
+
+            -- Kill player
+            if player.Character and player.Character:FindFirstChild("Humanoid") then
+                player.Character.Humanoid.Health = 0
+            end
+
+            -- Reset camera và trạng thái
+            camera.CameraType = Enum.CameraType.Custom
+            gui:Destroy()
+            isJumpscare = false
+
+            -- Reset speed entity nếu cần (cho entity tiếp tục di chuyển)
+            entity.Speed = 525
+        end
+    end
+end)
