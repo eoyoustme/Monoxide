@@ -35,7 +35,7 @@ local entity = Spawner.createEntity({
         100,
     },
     Jumpscare = {
-        true,
+        false        
         {
             Type = "1",
             Image1 = "rbxassetid://74330632949039",
@@ -74,10 +74,26 @@ local entity = Spawner.createEntity({
 -- Debug Events
 entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned.")
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
+game.Lighting.MainColorCorrection.Contrast = 10
+local tween = game:GetService("TweenService")
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+local TweenService = game:GetService("TweenService")
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(250, 0, 0)})
+TW:Play()
+wait(0)
 end
 
 entity.Debug.OnEntityDespawned = function()
     print("Entity has despawned.")
+wait(3)
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
+game.Lighting.MainColorCorrection.Contrast = 10
+local tween = game:GetService("TweenService")
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+local TweenService = game:GetService("TweenService")
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
+TW:Play()
 
     -- Achievement example
     local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
