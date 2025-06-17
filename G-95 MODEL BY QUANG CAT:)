@@ -1,14 +1,13 @@
--- Gọi Spawner
+-- Gọi Spawner (giữ nguyên phần tạo entity của bạn)
 local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/DoorEntitySpawn%2BSource'))()
 
--- Tạo entity G-95
 local entity = Spawner.createEntity({
     CustomName = "G-95",
     Model = "rbxassetid://78561638840681",
     Speed = 525,
     DelayTime = 9,
-    HeightOffset = 0.1,
-    CanKill = true, -- để true hoặc false đều được
+    HeightOffset = 5,
+    CanKill = false,
     NoDieOnCrouching = false,
     NoHiding = false,
     AntiCrucifix = false,
@@ -40,7 +39,7 @@ local entity = Spawner.createEntity({
     },
     Color = 'GuidingLight',
     DiffrentMessages = false,
-    CustomDialog = {  
+    CustomDialog = {
         {"Claim has seen you.", "It will consume anyone on sight.", "It takes a bit to fully spawn in", "so you can use that to your advantage."},
         {"Stop Dieing"},
         {"Bruh", "Use what you have learned from Rush!"},
@@ -49,70 +48,34 @@ local entity = Spawner.createEntity({
     }
 })
 
--- Debug functions (giữ nguyên hoặc sửa tùy ý)
-entity.Debug.OnEntitySpawned = function()
-    print("Entity has spawned.")
-    local lighting = game.Lighting
-    local tween = game:GetService("TweenService")
-    lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
-    lighting.MainColorCorrection.Contrast = 10
-    tween:Create(lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
-    tween:Create(lighting.MainColorCorrection, TweenInfo.new(5), {TintColor = Color3.fromRGB(250, 0, 0)}):Play()
-end
-
-entity.Debug.OnEntityDespawned = function()
-    print("Entity has despawned.")
-    local lighting = game.Lighting
-    local tween = game:GetService("TweenService")
-    task.wait(3)
-    lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
-    lighting.MainColorCorrection.Contrast = 10
-    tween:Create(lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
-    tween:Create(lighting.MainColorCorrection, TweenInfo.new(5), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
-
-    -- Achievement (nếu muốn)
-    local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
-    achievementGiver({
-        Title = "",
-        Desc = "",
-        Reason = "",
-        Image = "rbxassetid://"
-    })
-end
-
-entity.Debug.OnDeath = function()
-    warn("Player has died.")
-    -- Các logic death hint nếu cần
-end
-
 -- Chạy entity
 Spawner.runEntity(entity)
 
--- Jumpscare logic khóa camera, hiện ảnh và kill player thủ công
-
+-- Xử lý logic khóa camera, dừng entity và jumpscare
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
-local camera = workspace.CurrentCamera
 local player = Players.LocalPlayer
+local camera = workspace.CurrentCamera
+
 local entityPart = nil
 local triggered = false
 
--- Tìm part chính của entity (ví dụ tên part là "Main")
+-- Tìm part "Main" trong model "G-95"
 task.spawn(function()
     while not entityPart do
         local g95Model = workspace:FindFirstChild("G-95")
         if g95Model and g95Model:FindFirstChild("Main") then
             entityPart = g95Model.Main
-        elseif g95Model and g95Model:FindFirstChild("HumanoidRootPart") then
-            entityPart = g95Model.HumanoidRootPart
+            print("Entity part found!")
         end
         task.wait(0.1)
     end
 end)
 
 RunService.Heartbeat:Connect(function()
-    if triggered or not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") or not entityPart then return end
+    if triggered then return end
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") or not entityPart then return end
 
     local dist = (player.Character.HumanoidRootPart.Position - entityPart.Position).Magnitude
     local killRange = entity.Config.KillRange or 40
@@ -120,30 +83,37 @@ RunService.Heartbeat:Connect(function()
     if dist <= killRange then
         triggered = true
 
+        -- Dừng entity di chuyển
+        entity.Speed = 0
+
         -- Khóa camera vào entity
         camera.CameraType = Enum.CameraType.Scriptable
         local lookCF = CFrame.new(player.Character.Head.Position, entityPart.Position)
         camera.CFrame = lookCF
         TweenService:Create(camera, TweenInfo.new(0.75), {CFrame = lookCF}):Play()
 
-        -- Đợi 1 giây
         task.wait(1)
 
-        -- Hiện jumpscare
+        -- Hiện jumpscare GUI
         local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
         gui.Name = "G95Jumpscare"
-
         local img = Instance.new("ImageLabel", gui)
         img.Size = UDim2.new(1, 0, 1, 0)
         img.Position = UDim2.new(0, 0, 0, 0)
         img.BackgroundTransparency = 1
-        img.Image = "rbxassetid://14865476959" -- thay bằng id ảnh bạn muốn
+        img.Image = "rbxassetid://13299277942" -- thay bằng ảnh jumpscare bạn muốn
         img.ImageTransparency = 1
-
         TweenService:Create(img, TweenInfo.new(0.25), {ImageTransparency = 0}):Play()
 
-        -- Đợi 0.5 giây rồi kill player thủ công
+        -- Phát âm thanh jumpscare (nếu cần)
+        local sound = Instance.new("Sound", workspace)
+        sound.SoundId = "rbxassetid://6567183465" -- thay id phù hợp
+        sound.Volume = 3
+        sound:Play()
+
         task.wait(0.5)
+
+        -- Giết player
         if player.Character and player.Character:FindFirstChild("Humanoid") then
             player.Character.Humanoid.Health = 0
         end
