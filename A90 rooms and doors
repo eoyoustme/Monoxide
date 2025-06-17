@@ -22,7 +22,7 @@ GUI.Parent = player:WaitForChild("PlayerGui")
 local image = Instance.new("ImageLabel")
 image.BackgroundTransparency = 1
 image.Size = UDim2.new(1, 0, 1, 0)
-image.Image = "rbxassetid://90187712054412" -- Ảnh cảnh báo "STOP"
+image.Image = "rbxassetid://12350997663" -- Ảnh cảnh báo "STOP"
 image.Parent = GUI
 
 -- ⏳ Đếm ngược thời gian đứng yên
@@ -51,7 +51,7 @@ if moveDetected then
 	local face = Instance.new("ImageLabel")
 	face.BackgroundTransparency = 1
 	face.Size = UDim2.new(1, 0, 1, 0)
-	face.Image = "rbxassetid://71480847652585" -- 😱 Khuôn mặt jumpscare bạn nói
+	face.Image = "rbxassetid://13488575115" -- 😱 Khuôn mặt jumpscare bạn nói
 	face.ImageTransparency = 0
 	face.Parent = jumpscareGUI
 
@@ -63,7 +63,7 @@ if moveDetected then
 	jumpSound:Play()
 
 	-- Gây sát thương sau 2 giây
-	task.wait(3)
+	task.wait(2)
 	humanoid:TakeDamage(40)
 
 	-- Gửi death hint nếu đang dùng game như DOORS
