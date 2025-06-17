@@ -1,14 +1,14 @@
 -- Gọi Spawner
 local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/DoorEntitySpawn%2BSource'))()
 
--- Tạo thực thể G-95
+-- Tạo entity G-95
 local entity = Spawner.createEntity({
     CustomName = "G-95",
-    Model = "rbxassetid://83361722843174",
+    Model = "rbxassetid://78561638840681",
     Speed = 525,
     DelayTime = 9,
     HeightOffset = 0.1,
-    CanKill = true,
+    CanKill = true, -- để true hoặc false đều được
     NoDieOnCrouching = false,
     NoHiding = false,
     AntiCrucifix = false,
@@ -49,35 +49,28 @@ local entity = Spawner.createEntity({
     }
 })
 
--- Debug
+-- Debug functions (giữ nguyên hoặc sửa tùy ý)
 entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned.")
-    
     local lighting = game.Lighting
     local tween = game:GetService("TweenService")
-    
     lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
     lighting.MainColorCorrection.Contrast = 10
-    
     tween:Create(lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
     tween:Create(lighting.MainColorCorrection, TweenInfo.new(5), {TintColor = Color3.fromRGB(250, 0, 0)}):Play()
 end
 
 entity.Debug.OnEntityDespawned = function()
     print("Entity has despawned.")
-
     local lighting = game.Lighting
     local tween = game:GetService("TweenService")
-
     task.wait(3)
-
     lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
     lighting.MainColorCorrection.Contrast = 10
-
     tween:Create(lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
     tween:Create(lighting.MainColorCorrection, TweenInfo.new(5), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
 
-    -- Achievement
+    -- Achievement (nếu muốn)
     local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
     achievementGiver({
         Title = "",
@@ -89,89 +82,68 @@ end
 
 entity.Debug.OnDeath = function()
     warn("Player has died.")
-
-    local func, setupval, getinfo, typeof, getgc, next = nil, debug.setupvalue or setupvalue, debug.getinfo or getinfo, typeof, getgc, next
-    for i,v in next, getgc(false) do
-        if typeof(v) == "function" then
-            local info = getinfo(v)
-            if info.currentline == 54 and info.nups == 2 and info.is_vararg == 0 then
-                func = v
-                break
-            end
-        end
-    end
-    local function DeathHint(hints, type)
-        setupval(func, 1, hints)
-        if type ~= nil then
-            setupval(func, 2, type)
-        end
-    end
-
-    DeathHint({
-        "You died to who you call G-95",
-        "This Entity is so fast! Try to hide quickly!",
-        "It comes straight from hell to make you suffer.",
-        "..Avoid eye contact at all cost."
-    }, "Blue")
+    -- Các logic death hint nếu cần
 end
 
 -- Chạy entity
 Spawner.runEntity(entity)
 
--- 👁️ Jumpscare logic khi trong phạm vi KillRange
+-- Jumpscare logic khóa camera, hiện ảnh và kill player thủ công
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local camera = workspace.CurrentCamera
+local player = Players.LocalPlayer
 local entityPart = nil
 local triggered = false
 
+-- Tìm part chính của entity (ví dụ tên part là "Main")
 task.spawn(function()
     while not entityPart do
-        entityPart = workspace:FindFirstChild("G-95")
+        local g95Model = workspace:FindFirstChild("G-95")
+        if g95Model and g95Model:FindFirstChild("Main") then
+            entityPart = g95Model.Main
+        elseif g95Model and g95Model:FindFirstChild("HumanoidRootPart") then
+            entityPart = g95Model.HumanoidRootPart
+        end
         task.wait(0.1)
     end
 end)
 
 RunService.Heartbeat:Connect(function()
-    local player = Players.LocalPlayer
     if triggered or not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") or not entityPart then return end
 
     local dist = (player.Character.HumanoidRootPart.Position - entityPart.Position).Magnitude
+    local killRange = entity.Config.KillRange or 40
 
-    if dist <= entity.Config.KillRange then
+    if dist <= killRange then
         triggered = true
 
-        -- Lock camera
+        -- Khóa camera vào entity
         camera.CameraType = Enum.CameraType.Scriptable
-        camera.CFrame = CFrame.new(player.Character.Head.Position, entityPart.Position)
+        local lookCF = CFrame.new(player.Character.Head.Position, entityPart.Position)
+        camera.CFrame = lookCF
+        TweenService:Create(camera, TweenInfo.new(0.75), {CFrame = lookCF}):Play()
 
-        TweenService:Create(camera, TweenInfo.new(1), {
-            CFrame = CFrame.new(player.Character.Head.Position, entityPart.Position)
-        }):Play()
+        -- Đợi 1 giây
+        task.wait(1)
 
-        task.wait(2)
-
-        -- Show Jumpscare
+        -- Hiện jumpscare
         local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-        gui.Name = "JumpscareGUI"
+        gui.Name = "G95Jumpscare"
+
         local img = Instance.new("ImageLabel", gui)
         img.Size = UDim2.new(1, 0, 1, 0)
         img.Position = UDim2.new(0, 0, 0, 0)
-        img.Image = "rbxassetid://14865476959"
         img.BackgroundTransparency = 1
+        img.Image = "rbxassetid://14865476959" -- thay bằng id ảnh bạn muốn
         img.ImageTransparency = 1
 
-        TweenService:Create(img, TweenInfo.new(0.5), {ImageTransparency = 0}):Play()
+        TweenService:Create(img, TweenInfo.new(0.25), {ImageTransparency = 0}):Play()
 
-        -- Play sound
-        local sound = Instance.new("Sound", workspace)
-        sound.SoundId = "rbxassetid://6567183465"
-        sound.Volume = 3
-        sound:Play()
-
-        task.wait(2.5)
-
+        -- Đợi 0.5 giây rồi kill player thủ công
+        task.wait(0.5)
         if player.Character and player.Character:FindFirstChild("Humanoid") then
             player.Character.Humanoid.Health = 0
         end
