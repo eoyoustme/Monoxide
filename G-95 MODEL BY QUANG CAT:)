@@ -1,3 +1,4 @@
+-- Gọi Spawner
 local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/DoorEntitySpawn%2BSource'))()
 
 -- Tạo thực thể G-95
@@ -16,48 +17,25 @@ local entity = Spawner.createEntity({
     DieOnLook = false,
     BreakLights = true,
     BackwardsMovement = false,
-    MovementDeath = {
-        false,
-        '1',
-    },
-    FlickerLights = {
-        true,
-        4
-    },
-    Cycles = {
-        Min = 13,
-        Max = 13,
-        WaitTime = 0.7,
-    },
+    MovementDeath = { false, '1' },
+    FlickerLights = { true, 4 },
+    Cycles = { Min = 13, Max = 13, WaitTime = 0.7 },
     CamShake = {
         true,
         {3.5, 20, 0.1, 1},
         100,
     },
     Jumpscare = {
-        false        
+        false,
         {
             Type = "1",
             Image1 = "rbxassetid://74330632949039",
             Image2 = "rbxassetid://74330632949039",
             Shake = true,
-            Sound1 = {
-                "0",
-                { Volume = 0 },
-            },
-            Sound2 = {
-                "5263560566",
-                { Volume = 3 },
-            },
-            Flashing = {
-                true,
-                Color3.fromRGB(0, 0, 255),
-            },
-            Tease = {
-                false,
-                Min = 1,
-                Max = 1,
-            },
+            Sound1 = { "0", { Volume = 0 } },
+            Sound2 = { "5263560566", { Volume = 3 } },
+            Flashing = { true, Color3.fromRGB(0, 0, 255) },
+            Tease = { false, Min = 1, Max = 1 },
         },
     },
     Color = 'GuidingLight',
@@ -71,31 +49,35 @@ local entity = Spawner.createEntity({
     }
 })
 
--- Debug Events
+-- Debug
 entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned.")
-game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
-game.Lighting.MainColorCorrection.Contrast = 10
-local tween = game:GetService("TweenService")
-tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
-local TweenService = game:GetService("TweenService")
-local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(250, 0, 0)})
-TW:Play()
-wait(0)
+    
+    local lighting = game.Lighting
+    local tween = game:GetService("TweenService")
+    
+    lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
+    lighting.MainColorCorrection.Contrast = 10
+    
+    tween:Create(lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+    tween:Create(lighting.MainColorCorrection, TweenInfo.new(5), {TintColor = Color3.fromRGB(250, 0, 0)}):Play()
 end
 
 entity.Debug.OnEntityDespawned = function()
     print("Entity has despawned.")
-wait(3)
-game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
-game.Lighting.MainColorCorrection.Contrast = 10
-local tween = game:GetService("TweenService")
-tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
-local TweenService = game:GetService("TweenService")
-local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
-TW:Play()
 
-    -- Achievement example
+    local lighting = game.Lighting
+    local tween = game:GetService("TweenService")
+
+    task.wait(3)
+
+    lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
+    lighting.MainColorCorrection.Contrast = 10
+
+    tween:Create(lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+    tween:Create(lighting.MainColorCorrection, TweenInfo.new(5), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
+
+    -- Achievement
     local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
     achievementGiver({
         Title = "",
@@ -107,6 +89,7 @@ end
 
 entity.Debug.OnDeath = function()
     warn("Player has died.")
+
     local func, setupval, getinfo, typeof, getgc, next = nil, debug.setupvalue or setupvalue, debug.getinfo or getinfo, typeof, getgc, next
     for i,v in next, getgc(false) do
         if typeof(v) == "function" then
@@ -135,16 +118,14 @@ end
 -- Chạy entity
 Spawner.runEntity(entity)
 
--- ✅ Kết hợp logic JUMPSCARE khi người chơi trong phạm vi tấn công
+-- 👁️ Jumpscare logic khi trong phạm vi KillRange
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
-
 local camera = workspace.CurrentCamera
 local entityPart = nil
-local entityMoving = true
+local triggered = false
 
--- Đợi entity spawn xong
 task.spawn(function()
     while not entityPart do
         entityPart = workspace:FindFirstChild("G-95")
@@ -152,34 +133,26 @@ task.spawn(function()
     end
 end)
 
--- Kiểm tra người chơi có trong phạm vi không
 RunService.Heartbeat:Connect(function()
     local player = Players.LocalPlayer
-    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") or not entityPart then return end
+    if triggered or not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") or not entityPart then return end
 
     local dist = (player.Character.HumanoidRootPart.Position - entityPart.Position).Magnitude
 
-    if dist <= entity.Config.KillRange and entityMoving then
-        entityMoving = false
+    if dist <= entity.Config.KillRange then
+        triggered = true
 
-        -- Dừng chuyển động entity
-        if entity._running then
-            entity._running:Disconnect()
-        end
-
-        -- Khóa camera
+        -- Lock camera
         camera.CameraType = Enum.CameraType.Scriptable
         camera.CFrame = CFrame.new(player.Character.Head.Position, entityPart.Position)
 
-        -- Tween chuyển nhẹ
         TweenService:Create(camera, TweenInfo.new(1), {
             CFrame = CFrame.new(player.Character.Head.Position, entityPart.Position)
         }):Play()
 
-        -- Chờ 2 giây
         task.wait(2)
 
-        -- Hiện jumpscare
+        -- Show Jumpscare
         local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
         gui.Name = "JumpscareGUI"
         local img = Instance.new("ImageLabel", gui)
@@ -191,14 +164,14 @@ RunService.Heartbeat:Connect(function()
 
         TweenService:Create(img, TweenInfo.new(0.5), {ImageTransparency = 0}):Play()
 
-        -- Phát âm thanh
+        -- Play sound
         local sound = Instance.new("Sound", workspace)
         sound.SoundId = "rbxassetid://6567183465"
         sound.Volume = 3
         sound:Play()
 
-        -- Sau 1.5s thì giết người chơi
         task.wait(2.5)
+
         if player.Character and player.Character:FindFirstChild("Humanoid") then
             player.Character.Humanoid.Health = 0
         end
