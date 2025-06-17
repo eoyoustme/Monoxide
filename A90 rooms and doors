@@ -3,8 +3,8 @@ local static = Instance.new("Sound")
 static.SoundId = "rbxassetid://92453621152905"
 static.Parent = game.ReplicatedStorage
 static.Name = "Se"
-static.Pitch = 0.6
-static.Volume = 1.5
+static.Pitch = 1
+static.Volume = 10
 static.TimePosition = 0.2
 static:Play()
 
