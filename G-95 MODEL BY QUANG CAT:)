@@ -1,57 +1,32 @@
--- Gọi Spawner (giữ nguyên phần tạo entity của bạn)
+-- Gọi Spawner
 local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/DoorEntitySpawn%2BSource'))()
 
+-- Tạo thực thể
 local entity = Spawner.createEntity({
     CustomName = "G-95",
     Model = "rbxassetid://78561638840681",
     Speed = 525,
     DelayTime = 9,
-    HeightOffset = 5,
-    CanKill = false,
-    NoDieOnCrouching = false,
-    NoHiding = false,
-    AntiCrucifix = false,
+    HeightOffset = 4,
+    CanKill = true,
     KillRange = 40,
-    OneRoom = false,
     DieOnLook = false,
     BreakLights = true,
-    BackwardsMovement = false,
-    MovementDeath = { false, '1' },
     FlickerLights = { true, 4 },
-    Cycles = { Min = 13, Max = 13, WaitTime = 0.7 },
+    Cycles = { Min = 1, Max = 1, WaitTime = 0.5 },
     CamShake = {
         true,
         {3.5, 20, 0.1, 1},
         100,
     },
-    Jumpscare = {
-        false,
-        {
-            Type = "1",
-            Image1 = "rbxassetid://74330632949039",
-            Image2 = "rbxassetid://74330632949039",
-            Shake = true,
-            Sound1 = { "0", { Volume = 0 } },
-            Sound2 = { "5263560566", { Volume = 3 } },
-            Flashing = { true, Color3.fromRGB(0, 0, 255) },
-            Tease = { false, Min = 1, Max = 1 },
-        },
-    },
-    Color = 'GuidingLight',
-    DiffrentMessages = false,
-    CustomDialog = {
-        {"Claim has seen you.", "It will consume anyone on sight.", "It takes a bit to fully spawn in", "so you can use that to your advantage."},
-        {"Stop Dieing"},
-        {"Bruh", "Use what you have learned from Rush!"},
-        {"It seems like Template is causing quite the ruckus...", "Hide in a closet or bed as quickly as possible!"},
-        {"I have told You What to do", "YOU JUST HAVE A SKILL ISSUE"}
-    }
+    Jumpscare = { false }, -- Jumpscare riêng xử lý bằng local script
+    Color = 'GuidingLight'
 })
 
 -- Chạy entity
 Spawner.runEntity(entity)
 
--- Xử lý logic khóa camera, dừng entity và jumpscare
+-- LOCAL jumpscare logic
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
@@ -60,60 +35,61 @@ local camera = workspace.CurrentCamera
 
 local entityPart = nil
 local triggered = false
+local killRange = entity.Config.KillRange or 40
 
--- Tìm part "Main" trong model "G-95"
+-- Tìm entityPart khi entity spawn
 task.spawn(function()
     while not entityPart do
-        local g95Model = workspace:FindFirstChild("G-95")
-        if g95Model and g95Model:FindFirstChild("Main") then
-            entityPart = g95Model.Main
+        local g95 = workspace:FindFirstChild("G-95")
+        if g95 and g95:FindFirstChild("Main") then
+            entityPart = g95.Main
             print("Entity part found!")
         end
         task.wait(0.1)
     end
 end)
 
+-- Jumpscare logic
 RunService.Heartbeat:Connect(function()
-    if triggered then return end
-    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") or not entityPart then return end
+    if triggered or not entityPart then return end
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return end
 
     local dist = (player.Character.HumanoidRootPart.Position - entityPart.Position).Magnitude
-    local killRange = entity.Config.KillRange or 40
 
     if dist <= killRange then
         triggered = true
 
-        -- Dừng entity di chuyển
-        entity.Speed = 0
+        -- Dừng entity bằng cách anchor part chính
+        entityPart.Anchored = true
 
-        -- Khóa camera vào entity
+        -- Khóa camera
         camera.CameraType = Enum.CameraType.Scriptable
-        local lookCF = CFrame.new(player.Character.Head.Position, entityPart.Position)
-        camera.CFrame = lookCF
-        TweenService:Create(camera, TweenInfo.new(0.75), {CFrame = lookCF}):Play()
+        local look = CFrame.new(player.Character.Head.Position, entityPart.Position)
+        camera.CFrame = look
+        TweenService:Create(camera, TweenInfo.new(0.5), {CFrame = look}):Play()
 
+        -- Đợi 1 giây rồi hiện jumpscare
         task.wait(1)
 
-        -- Hiện jumpscare GUI
         local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
         gui.Name = "G95Jumpscare"
         local img = Instance.new("ImageLabel", gui)
         img.Size = UDim2.new(1, 0, 1, 0)
         img.Position = UDim2.new(0, 0, 0, 0)
         img.BackgroundTransparency = 1
-        img.Image = "rbxassetid://13299277942" -- thay bằng ảnh jumpscare bạn muốn
+        img.Image = "rbxassetid://14865476959" -- Thay bằng hình ảnh jumpscare
         img.ImageTransparency = 1
         TweenService:Create(img, TweenInfo.new(0.25), {ImageTransparency = 0}):Play()
 
-        -- Phát âm thanh jumpscare (nếu cần)
+        -- Phát âm thanh
         local sound = Instance.new("Sound", workspace)
-        sound.SoundId = "rbxassetid://6567183465" -- thay id phù hợp
+        sound.SoundId = "rbxassetid://6567183465"
         sound.Volume = 3
         sound:Play()
 
         task.wait(0.5)
 
-        -- Giết player
+        -- Kill player
         if player.Character and player.Character:FindFirstChild("Humanoid") then
             player.Character.Humanoid.Health = 0
         end
