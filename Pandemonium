@@ -60,7 +60,7 @@ if RushNew then
 			h:TakeDamage(10)
 			local stats = game:GetService("ReplicatedStorage").GameStats
 			if stats:FindFirstChild("Player_"..plr.Name) then
-				stats["Player_"..plr.Name].Total.DeathCause.Value = "Deer God"
+				stats["Player_"..plr.Name].Total.DeathCause.Value = "Pandemonium"
 			end
 		end
 	end)
