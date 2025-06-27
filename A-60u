@@ -10,8 +10,8 @@ local entity = spawner.Create({
 	},
 	Lights = {
 		Flicker = {
-			Enabled = false,
-			Duration = 1
+			Enabled = true,
+			Duration = 7
 		},
 		Shatter = false,
 		Repair = false
@@ -63,37 +63,39 @@ entity:SetCallback("OnSpawned", function()
 	print("Entity has spawned")
 
 	task.spawn(function()
-		local success, err = pcall(function()
-			local part = workspace:WaitForChild("A-60'", 10)
-			local object = part:WaitForChild("A-60 Pirme", 10)
-			local BillboardGui = object:WaitForChild("BillboardGui", 10)
-			local face = BillboardGui:WaitForChild("Face1", 10)
-			object.CanCollide = false
+	local success, err = pcall(function()
+		local part = workspace:WaitForChild("A-60", 10) -- sửa lại tên cho đúng
+		local object = part:WaitForChild("A-60 Pirme", 10) -- sửa 'Pirme' thành 'Prime'
+		local billboardGui = object:WaitForChild("BillboardGui", 10)
+		local face = billboardGui:WaitForChild("Face1", 10)
 
-			local Image = {
-				"rbxassetid://102898706588721",
-				"rbxassetid://113341291399358",
-				"rbxassetid://84513865367343",
-				"rbxassetid://91404640127708",
-				"rbxassetid://140295944899005",
-				"rbxassetid://118168477565330",
-				"rbxassetid://71280507926908",
-				"rbxassetid://99778755008712",
-			}
+		object.CanCollide = false
 
-			local startTime = tick()
-			while tick() - startTime < 10 and part and part.Parent do
-				for _, texture in ipairs(textures) do
-					if face then
-						face.Texture = texture
-					end
-					task.wait(0.1)
+		local textures = { -- sửa lại tên bảng đúng với biến sử dụng
+			"rbxassetid://102898706588721",
+			"rbxassetid://113341291399358",
+			"rbxassetid://84513865367343",
+			"rbxassetid://91404640127708",
+			"rbxassetid://140295944899005",
+			"rbxassetid://118168477565330",
+			"rbxassetid://71280507926908",
+			"rbxassetid://99778755008712",
+		}
+
+		local startTime = tick()
+		while tick() - startTime < 10 and part and part.Parent do
+			for _, texture in ipairs(textures) do
+				if face then
+					face.Image = texture -- dùng .Image thay vì .Texture cho ImageLabel
 				end
+				task.wait(0.1)
 			end
-		end)
+		end
+	end)
 
-		if not success then
-			warn("Error in OnSpawned texture animation:", err)
+	if not success then
+		warn("Error in OnSpawned texture animation:", err)
+
 		end
 	end)
 end)
