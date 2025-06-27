@@ -87,7 +87,7 @@ entity:SetCallback("OnSpawned", function()
 					if face then
 						face.Texture = texture
 					end
-					task.wait(0.03)
+					task.wait(0.1)
 				end
 			end
 		end)
