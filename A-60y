@@ -67,7 +67,7 @@ entity:SetCallback("OnSpawned", function()
 			local part = workspace:WaitForChild("A-60'", 10)
 			local object = part:WaitForChild("A-60 Pirme", 10)
 			local BillboardGui = object:WaitForChild("BillboardGui", 10)
-			local face1 = BillboardGui:WaitForChild("Face1", 10)
+			local face = BillboardGui:WaitForChild("Face1", 10)
 			object.CanCollide = false
 
 			local Image = {
