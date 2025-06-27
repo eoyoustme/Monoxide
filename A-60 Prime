@@ -65,12 +65,12 @@ entity:SetCallback("OnSpawned", function()
 	task.spawn(function()
 		local success, err = pcall(function()
 			local part = workspace:WaitForChild("A-60'", 10)
-			local object = part:WaitForChild("A-60New", 10)
-			local attachment = object:WaitForChild("Main", 10)
-			local face = attachment:WaitForChild("Face", 10)
+			local object = part:WaitForChild("A-60 Pirme", 10)
+			local BillboardGui = object:WaitForChild("BillboardGui", 10)
+			local face1 = BillboardGui:WaitForChild("Face1", 10)
 			object.CanCollide = false
 
-			local textures = {
+			local Image = {
 				"rbxassetid://102898706588721",
 				"rbxassetid://113341291399358",
 				"rbxassetid://84513865367343",
