@@ -65,6 +65,7 @@ local entityList = {
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/DEMON", delay = 666},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Twiter%20remake", delay = 450},
     {url = "https://raw.githubusercontent.com/eoyoustme/Monoxide/refs/heads/main/Twiter%202", delay = 480},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/B-2441", delay = 244},
 }
 
 -- Gộp các coroutine thành 1 hệ thống
