@@ -3,8 +3,4 @@ caption.TextColor3 = Color3.fromRGB(255, 255, 255)
 require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("God has give you crucifix",true)
 game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
 
-_G.Uses = 999999999999999999999999999999999999999999999999999999999999999999999999999999999
-_G.Range = 45
-_G.OnAnything = false
-_G.Fail = false
-loadstring(game:HttpGet('https://raw.githubusercontent.com/PenguinManiack/Crucifix/main/Crucifix.lua'))() --no deivid-- --execute this instead--
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/7"))()
