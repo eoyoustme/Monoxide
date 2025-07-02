@@ -125,6 +125,16 @@ end)
 --====== Damage & Jumpscare Logic ======--
 entity:SetCallback("OnDamagePlayer", function(newHealth)
 	print(newHealth == 0 and "Entity has killed the player" or "Entity has damaged the player")
+while task.wait() do
+    if death == true then
+        break
+    end
+local entity = workspace:WaitForChild("A60")
+local entityPrimaryPart = entity:FindFirstChild("RushNew")
+local Camera = workspace.CurrentCamera
+game.TweenService:Create(entityPrimaryPart, TweenInfo.new(0), {CFrame = camera.CFrame * CFrame.new(0, -0.5, -6)}):Play()
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 0
+end
 
 	local player = game.Players.LocalPlayer
 	if not player then return end
