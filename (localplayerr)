@@ -1,0 +1,24 @@
+function convert(Room)
+    task.wait(1.5)
+    if Room:IsA("Model") then
+        if tonumber(Room.Name) ~= nil then
+            for _, v in pairs(Room.Parts:GetDescendants()) do
+                if v:IsA("Part") or v:IsA("BasePart") or v:IsA("MeshPart") or v:IsA("UnionOperation") then
+                    if v.Material == Enum.Material.Wood or v.Material == Enum.Material.WoodPlanks then
+                        v.Color = Color3.fromRGB(60, 60, 60)
+                        v.Material = Enum.Material.Limestone
+                    end
+                end
+            end
+            for _ , v in Room:GetDescendants() do
+                if v.Name == "Door" and v:IsA("MeshPart") then
+                    v.Color = Color3.fromRGB(70,70,70)
+                    v.Material = Enum.Material.Slate
+                    if v:FindFirstChild("Sign") then
+                        v.Sign:Destroy()
+                    end
+                end
+            end
+        end
+    end
+end
